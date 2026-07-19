@@ -1,0 +1,46 @@
+{
+  "id": "of-gods-and-men",
+  "title": "Of Gods and Men",
+  "description": "A tabletop roleplaying game where mortals become the chosen champions of the gods.",
+  "version": "0.0.1-alpha",
+
+  "authors": [
+    {
+      "name": "Pablo Morais Alvarez"
+    }
+  ],
+
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+
+  "esmodules": [
+    "module/of-gods-and-men.mjs"
+  ],
+
+  "styles": [
+    "styles/of-gods-and-men.css"
+  ],
+
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    }
+  ],
+
+  "packs": [],
+
+  "url": "",
+
+  "manifest": "",
+
+  "download": ""
+}
