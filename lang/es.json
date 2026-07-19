@@ -1,3 +1,14 @@
 {
-    
+  "TYPES": {
+    "Actor": {
+      "ascended": "Ascendido",
+      "npc": "PNJ"
+    },
+    "Item": {
+      "god": "Dios",
+      "blessing": "Bendición",
+      "archetype": "Arquetipo",
+      "equipment": "Equipo"
+    }
+  }
 }

@@ -36,6 +36,19 @@
     }
   ],
 
+  "documentTypes": {
+    "Actor": {
+        "ascended": {},
+        "npc": {}
+    },
+    "Item": {
+        "god": {},
+        "blessing": {},
+        "archtype": {},
+        "equipment": {}
+    }
+  },
+
   "packs": [],
 
   "url": "",
