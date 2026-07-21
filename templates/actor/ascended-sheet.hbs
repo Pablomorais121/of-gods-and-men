@@ -2,6 +2,25 @@
     <h1>{{actor.name}}</h1>
 
     <fieldset>
+        <legend>God</legend>
+        {{#if god}}
+            <p>{{god.name}}</p>
+            <p><strong>{{god.system.blessing.name}}</strong> ({{god.system.blessing.cost}} Stamina)</p>
+        {{else}}
+            <p>Drag a God here</p>
+        {{/if}}
+    </fieldset>
+
+    <fieldset>
+        <legend>Archetype</legend>
+        {{#if archetype}}
+            <p>{{archetype.name}}</p>
+        {{else}}
+            <p>Drag an Archetype here</p>
+        {{/if}}
+    </fieldset>
+
+    <fieldset>
         <legend>Resources</legend>
 
         <label>Health
