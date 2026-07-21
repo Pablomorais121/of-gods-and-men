@@ -22,7 +22,7 @@ export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
-        context.actor = this.item;
+        context.item = this.item;
         context.system = this.item.system;
         return context;
     }
