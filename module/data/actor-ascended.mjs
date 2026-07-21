@@ -25,8 +25,6 @@ export default class AscendedData extends foundry.abstract.TypeDataModel {
             }),
         });
 
-       
-
         const schema = {};
 
         schema.attributes = new SchemaField({

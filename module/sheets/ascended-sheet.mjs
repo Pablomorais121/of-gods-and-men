@@ -20,6 +20,17 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         }
     };
 
+    async _onDropItem(event, item){
+        if (item.type === "god" || item.type === "archetype") {
+            const existing = this.actor.items.find(i => i.type === item.type);
+            if (existing) {
+                await existing.delete();
+            }
+        }
+        
+        return super._onDropItem(event, item);
+    }
+
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
         context.actor = this.actor;
