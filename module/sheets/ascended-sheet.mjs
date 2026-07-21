@@ -8,6 +8,9 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         position: {
             width: 600,
             height: 700
+        },
+        form: {
+            submitOnChange: true,
         }
     };
 

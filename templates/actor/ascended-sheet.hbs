@@ -1,4 +1,104 @@
-<div>
-  <h1>{{actor.name}}</h1>
-  <p>Strength: {{system.attributes.strength}}</p>
+<div class="ascended-sheet">
+    <h1>{{actor.name}}</h1>
+
+    <fieldset>
+        <legend>Resources</legend>
+
+        <label>Health
+            <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" min="0">
+            / {{system.resources.health.max}}
+        </label>
+
+        <label>Stamina
+            <input type="number" name="system.resources.stamina.value" value="{{system.resources.stamina.value}}" min="0">
+            / {{system.resources.stamina.max}}
+        </label>
+
+        <label>Sanity
+            <input type="number" name="system.resources.sanity.value" value="{{system.resources.sanity.value}}" min="0">
+            / {{system.resources.sanity.max}}
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Attributes</legend>
+
+        <label>Strength
+        <input type="number" name="system.attributes.strength" value="{{system.attributes.strength}}" min="0" max="5">
+        </label>
+
+        <label>Endurance
+        <input type="number" name="system.attributes.resistance" value="{{system.attributes.resistance}}" min="0" max="5">
+        </label>
+
+        <label>Mind
+        <input type="number" name="system.attributes.mind" value="{{system.attributes.mind}}" min="0" max="5">
+        </label>
+
+        <label>Personality
+        <input type="number" name="system.attributes.personality" value="{{system.attributes.personality}}" min="0" max="5">
+        </label>
+
+        <label>Reflexes
+        <input type="number" name="system.attributes.reflexes" value="{{system.attributes.reflexes}}" min="0" max="5">
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Skills</legend>
+
+        <label>Melee combat
+        <input type="number" name="system.skills.closeCombat" value="{{system.skills.closeCombat}}" min="0" max="5">
+        </label>
+
+        <label>Ranged combat
+        <input type="number" name="system.skills.rangedCombat" value="{{system.skills.rangedCombat}}" min="0" max="5">
+        </label>
+
+        <label>Presence
+        <input type="number" name="system.skills.presence" value="{{system.skills.presence}}" min="0" max="5">
+        </label>
+
+        <label>Criminality
+        <input type="number" name="system.skills.criminality" value="{{system.skills.criminality}}" min="0" max="5">
+        </label>
+
+        <label>Education
+        <input type="number" name="system.skills.education" value="{{system.skills.education}}" min="0" max="5">
+        </label>
+
+        <label>Science
+        <input type="number" name="system.skills.science" value="{{system.skills.science}}" min="0" max="5">
+        </label>
+
+        <label>Divinity
+        <input type="number" name="system.skills.divinity" value="{{system.skills.divinity}}" min="0" max="5">
+        </label>
+
+        <label>Survival
+        <input type="number" name="system.skills.survival" value="{{system.skills.survival}}" min="0" max="5">
+        </label>
+
+        <label>Craftsmanship
+        <input type="number" name="system.skills.craftsmanship" value="{{system.skills.craftsmanship}}" min="0" max="5">
+        </label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Other</legend>
+
+        <label>XP
+            <input type="number" name="system.experience" value="{{system.experience}}" min="0">
+        </label>
+
+        <label>Divine Help Points
+            <input type="number" name="system.divineHelpPoints" value="{{system.divineHelpPoints}}" min="0">
+        </label>
+
+        <label>Dogma Breaks
+            <input type="number" name="system.dogmaBreaks" value="{{system.dogmaBreaks}}" min="0" max="3">
+        </label>
+
+    </fieldset>
+
 </div>
