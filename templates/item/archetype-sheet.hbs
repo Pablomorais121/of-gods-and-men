@@ -5,5 +5,29 @@
         <legend>Description</legend>
         <textarea name="system.description">{{system.description}}</textarea>
     </fieldset>
-    
+
+    <fieldset>
+        <legend>Priorities</legend>
+        {{#each system.priorities}}
+            <div class="priority-row">
+                <label>Points
+                    <Input types="bumber" class="priority-points" data-index="{{@index}}" value="{{this.points}}" min="1">
+                </label>
+
+                <label> Options 
+                    <select class="priority-options" data-index="{{@index}}" multiple>
+                        {{#each ../skillChoices}}
+                        <option value="{{this.key}}" {{#if (includes ../this.options this.key)}}selected{{/if}}>{{this.label}}</option>
+                        {{/each}}
+                    </select>
+                </label>
+                
+                <button type="button" data-action="deletePriority" data-index="{{@index}}">X</button>
+            </div>
+        {{/each}}
+
+        <button type="button" data-action="addPriority">+ Add Priority</button>
+        <button type="button" data-action="savePriority">Save Priority</button>
+    </fieldset>
+
 </div>
