@@ -3,6 +3,7 @@ import GodData from "./data/item-god.mjs";
 import ArchetypeData from "./data/item-archetype.mjs";
 import AscendedSheet from "./sheets/ascended-sheet.mjs";
 import GodSheet from "./sheets/god-sheet.mjs";
+import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
 
 Hooks.once("init", () => {
     console.log("Of Gods and Men | Initializing System");
@@ -23,6 +24,12 @@ Hooks.once("init", () => {
         types: ["god"],
         makeDefault: true,
         label: "God Sheet"
+    });
+
+    Items.registerSheet("of-gods-and-men", ArchetypeSheet, {
+        types: ["archetype"],
+        makeDefault: true,
+        label: "Archetype Sheet"
     });
 
 }); 
