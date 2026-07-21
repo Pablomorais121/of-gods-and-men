@@ -1,0 +1,35 @@
+<div class="god-sheet">
+    <h1>{{item.name}}</h1>
+
+    <fieldset>
+        <legend>Description</legend>
+        <textarea name="system.description">{{system.description}}</textarea>
+    </fieldset>
+
+    <fieldset>
+        <legend>Blessing</legend>
+        <label>Name
+            <input type="text" name="system.blessing.name" value="{{system.blessing.name}}">
+        </label>
+
+        <label>Cost (Stamina)
+            <input type="number" name="system.blessing.cost" value="{{system.blessing.cost}}" min="0">
+        </label>
+
+        <label>Description
+            <textarea name="system.blessing.description">{{system.blessing.description}}</textarea>
+        </label>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Dogma</legend>
+        <label>Name
+            <input type="text" name="system.dogma.name" value="{{system.dogma.name}}">
+        </label>
+        
+        <label>Description
+            <textarea name="system.dogma.description">{{system.dogma.description}}</textarea>
+        </label>
+    </fieldset>
+</div>
