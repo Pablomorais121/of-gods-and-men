@@ -2,11 +2,11 @@ const {NumberField, StringField, SchemaField, HTMLField } = foundry.data.fields;
 
 export default class AscendedData extends foundry.abstract.TypeDataModel {
     static defineSchema() {
-        const attributeField = () => new NumberField({
+        const attributeField = (max = 5) => new NumberField({
             required: true,
             integer: true,
             min: 0,
-            max: 5,
+            max: max,
             initial: 0
         });
 
@@ -54,6 +54,22 @@ export default class AscendedData extends foundry.abstract.TypeDataModel {
             stamina: resourceField(),
             sanity: resourceField()
         });
+
+        schema.experience = new NumberField({
+            required: true,
+            integer: true,
+            min: 0,
+            initial: 0
+        });
+
+        schema.divineHelpPoints = new NumberField({
+            required: true,
+            integer: true,
+            min: 0,
+            initial:0
+        });
+
+        schema.dogmaBreaks = attributeField(3);
             
         return schema;
     }
