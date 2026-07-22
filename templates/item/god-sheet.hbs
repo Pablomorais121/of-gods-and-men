@@ -32,4 +32,29 @@
             <textarea name="system.dogma.description">{{system.dogma.description}}</textarea>
         </label>
     </fieldset>
+
+    <fieldset>
+        <legend>Spells</legend>
+        {{#each system.spells}}
+            <div class="spell-row">
+                <label>Name
+                    <input type="text" class="spell-name" value="{{this.name}}">
+                </label>
+
+                <label>Cost (Sanity)
+                    <input type="number" class="spell-cost" value="{{this.cost}}" min="0">
+                </label>
+
+                <label>Description
+                    <textarea class="spell-description">{{this.description}}</textarea>
+                </label>
+                
+                <button type="button" data-action="deleteSpell" data-index="{{@index}}">X</button>
+            </div>
+        {{/each}}
+
+        <button type="button" data-action="addSpell">+ Add Spell</button>
+        <button type="button" data-action="saveSpell">Save Spell</button>
+    </fieldset>
+
 </div>
