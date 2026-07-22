@@ -1,16 +1,22 @@
 import AscendedData from "./data/actor-ascended.mjs";
 import GodData from "./data/item-god.mjs";
 import ArchetypeData from "./data/item-archetype.mjs";
+import NPCData from "./data/actor-npc.mjs";
+
 import AscendedSheet from "./sheets/ascended-sheet.mjs";
 import GodSheet from "./sheets/god-sheet.mjs";
 import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
+import NPCSheet from "./sheets/npc-sheet.mjs";
 
 Hooks.once("init", () => {
     console.log("Of Gods and Men | Initializing System");
 
     CONFIG.Actor.dataModels.ascended = AscendedData;
+    CONFIG.Actor.dataModels.npc = NPCData;
+
     CONFIG.Item.dataModels.god = GodData;
     CONFIG.Item.dataModels.archetype = ArchetypeData;
+    
 
     const {Actors, Items} = foundry.documents.collections;
 
