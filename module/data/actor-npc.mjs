@@ -69,13 +69,6 @@ export default class NPCData extends foundry.abstract.TypeDataModel {
             const {strength, resistance, reflexes, mind, personality} = this.attributes;
             const tier = this.tier;
 
-            for (const key of Object.key(this.attributes)) {
-                this.attributes[key] = Math.max(this.attributes[key], tier);
-            }
-
-            for (const key of Object.keys(this.skills)) {
-                this.skills[key] = Math.max(this.skills[key], tier);
-            }
             
             this.resources.health.max = 1 + strength + resistance;
             this.resources.stamina.max = 1 + resistance + reflexes;

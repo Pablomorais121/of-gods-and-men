@@ -29,6 +29,12 @@ Hooks.once("init", () => {
         label: "Ascended Sheet"
     });
 
+    Actors.registerSheet("of-gods-and-men", NPCSheet, {
+        types: ["npc"],
+        makeDefault: true,
+        label: "Ascended Sheet"
+    });
+
     Items.registerSheet("of-gods-and-men", GodSheet, {
         types: ["god"],
         makeDefault: true,
