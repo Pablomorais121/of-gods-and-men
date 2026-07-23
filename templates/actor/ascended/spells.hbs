@@ -1,0 +1,13 @@
+<!-- spells.hbs -->
+<div class="tab {{tab.cssClass}}" data-tab="spells" data-group="primary">
+    {{#if god}}
+        {{#each god.system.spells}}
+            <fieldset>
+                <legend>{{this.name}} ({{this.cost}} Sanity)</legend>
+                <p>{{{this.description}}}</p>
+            </fieldset>
+        {{/each}}
+    {{else}}
+        <p>No God chosen yet</p>
+    {{/if}}
+</div>

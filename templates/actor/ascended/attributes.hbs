@@ -1,23 +1,8 @@
-<div class="ascended-sheet">
-    <h1>{{actor.name}}</h1>
+<div class="tab {{tab.cssClass}}" data-tab="attributes" data-group="primary">
 
     <fieldset>
-        <legend>God</legend>
-        {{#if god}}
-            <p>{{god.name}}</p>
-            <p><strong>{{god.system.blessing.name}}</strong> ({{god.system.blessing.cost}} Stamina)</p>
-        {{else}}
-            <p>Drag a God here</p>
-        {{/if}}
-    </fieldset>
-
-    <fieldset>
-        <legend>Archetype</legend>
-        {{#if archetype}}
-            <p>{{archetype.name}}</p>
-        {{else}}
-            <p>Drag an Archetype here</p>
-        {{/if}}
+        <legend>God & Archetype</legend>
+        <p>{{#if god}}{{god.name}}{{else}}No God chosen{{/if}} — {{#if archetype}}{{archetype.name}}{{else}}No Archetype chosen{{/if}}</p>
     </fieldset>
 
     <fieldset>
@@ -97,5 +82,4 @@
         </label>
 
     </fieldset>
-
 </div>

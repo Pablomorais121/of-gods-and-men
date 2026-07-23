@@ -1,0 +1,24 @@
+<!-- god-archetype.hbs -->
+<div class="tab {{tab.cssClass}}" data-tab="godArchetype" data-group="primary">
+    {{#if god}}
+        <fieldset>
+            <legend>{{god.name}}</legend>
+            <p>{{{god.system.description}}}</p>
+            <p><strong>Blessing:</strong> {{god.system.blessing.name}} ({{god.system.blessing.cost}} Stamina)</p>
+            <p>{{{god.system.blessing.description}}}</p>
+            <p><strong>Dogma:</strong> {{god.system.dogma.name}}</p>
+            <p>{{{god.system.dogma.description}}}</p>
+        </fieldset>
+    {{else}}
+        <p>Drag a God item here</p>
+    {{/if}}
+
+    {{#if archetype}}
+        <fieldset>
+            <legend>{{archetype.name}}</legend>
+            <p>{{{archetype.system.description}}}</p>
+        </fieldset>
+    {{else}}
+        <p>Drag an Archetype item here</p>
+    {{/if}}
+</div>
