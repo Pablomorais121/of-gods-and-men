@@ -9,7 +9,8 @@ export default class NPCData extends foundry.abstract.TypeDataModel {
             required: true,
             integer: true,
             min: 0,
-            initial: 1
+            max: 10,
+            initial: 0
         });
 
         const npcAttributeField = () => new NumberField({
@@ -65,13 +66,10 @@ export default class NPCData extends foundry.abstract.TypeDataModel {
         return schema;
     }
 
-     prepareDerivedData() {
-            const {strength, resistance, reflexes, mind, personality} = this.attributes;
-            const tier = this.tier;
-
-            
-            this.resources.health.max = 1 + strength + resistance;
-            this.resources.stamina.max = 1 + resistance + reflexes;
-            this.resources.sanity.max = 1 + mind + personality;
-        };
+    prepareDerivedData() {
+        const {strength, resistance, reflexes, mind, personality} = this.attributes;
+        this.resources.health.max = 1 + strength + resistance;
+        this.resources.stamina.max = 1 + resistance + reflexes;
+        this.resources.sanity.max = 1 + mind + personality;
+    };
 }

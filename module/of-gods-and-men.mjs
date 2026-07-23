@@ -32,7 +32,7 @@ Hooks.once("init", () => {
     Actors.registerSheet("of-gods-and-men", NPCSheet, {
         types: ["npc"],
         makeDefault: true,
-        label: "Ascended Sheet"
+        label: "NPC Sheet"
     });
 
     Items.registerSheet("of-gods-and-men", GodSheet, {
@@ -48,3 +48,38 @@ Hooks.once("init", () => {
     });
 
 }); 
+
+Hooks.on("preUpdateActor", (actor, changes, options, userID) => {
+    if (actor.type !== "npc") return;
+
+    const oldTier = actor.system.tier;
+    const newTier = changes.system?.tier;
+    if (newTier !== undefined && newTier !== oldTier){
+
+        const attrs = foundry.utils.mergeObject(actor.system.attributes, changes.system?.attributes ?? {}, {inplace: false});
+        const skills = foundry.utils.mergeObject(actor.system.skills, changes.system?.skills ?? {}, {inplace: false});
+
+        changes.system.attributes ??= {};
+        changes.system.skills ??= {};
+
+        for(const key of Object.keys(attrs)) {
+            if (attrs[key] !== newTier) changes.system.attributes[key] = newTier;
+        }
+
+        for(const key of Object.keys(skills)) {
+            if (skills[key] !== newTier) changes.system.skills[key] = newTier;
+        }
+    } 
+
+    const finalAttrs = changes.system.attributes;
+    const healthMax = 1 + finalAttrs.strength + finalAttrs.resistance;
+    const staminaMax = 1 + finalAttrs.resistance + finalAttrs.reflexes;
+    const sanityMax = 1 + finalAttrs.mind + finalAttrs.personality;
+
+    changes.system.resources ??= {};
+    changes.system.resources.health = { value: healthMax };
+    changes.system.resources.stamina = { value: staminaMax };
+    changes.system.resources.sanity = { value: sanityMax };
+
+    return;
+});
