@@ -14,7 +14,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
 
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "actor", "ascended"],
-        position: { width: 600, height: 700 },
+        position: { width: 650, height: 750 },
         form: { submitOnChange: true },
         actions: {
             setScore: AscendedSheet.#onSetScore
@@ -22,8 +22,22 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
     };
 
     static PARTS = {
-        body: {
-            template: "systems/of-gods-and-men/templates/actor/ascended-sheet.hbs"
+        tabs: {template: "templates/generic/tab-navigation.hbs"},
+        attributes: {template: "systems/of-gods-and-men/templates/actor/ascended/attributes.hbs"},
+        inventory: {template: "systems/of-gods-and-men/templates/actor/ascended/inventory.hbs"},
+        godArchetype: {template: "systems/of-gods-and-men/templates/actor/ascended/god-archetype.hbs"},
+        spells: {template: "systems/of-gods-and-men/templates/actor/ascended/spells.hbs"}
+    };
+
+    static TABS = {
+        primary: {
+            tabs: [
+                { id:"attributes", label: "Attributes"},
+                { id: "inventory", label: "Inventory"},
+                { id: "godArchetype", label: "God & Archetype" },
+                { id: "spells", label: "Spells" }
+            ],
+            initial: "attributes"
         }
     };
 
@@ -48,13 +62,29 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const context = await super._prepareContext(options);
         context.actor = this.actor;
         context.system = this.actor.system;
-
         context.attributeRows = buildScoreRows(ATTRIBUTE_LABELS, this.actor.system.attributes);
         context.skillRows = buildScoreRows(SKILL_LABELS, this.actor.system.skills);
-
         context.god = this.actor.items.find(i => i.type === "god");
         context.archetype = this.actor.items.find(i => i.type === "archetype");
 
+        context.tabs = this._prepareTabs("primary");
+
+        return context;
+    }
+
+    _prepareTabs(group) {
+        return this.constructor.TABS[group].tabs.reduce((tabs, t) => {
+            const isActive = (this.tabGroups[group] ?? this.constructor.TABS[group].initial) === t.id;
+            tabs[t.id] = {...t, group, active: isActive, cssClass: isActive ? "active" : ""};
+            return tabs;
+        }, {});
+    }
+
+    async _preparePartContext(partId, context) {
+        context = await super._preparePartContext(partId, context);
+        if (context.tabs?.[partId]) {
+            context.tab = context.tabs[partId];
+        }
         return context;
     }
 
