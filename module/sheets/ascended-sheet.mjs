@@ -1,18 +1,23 @@
-import { SKILL_LABELS } from "../constants.mjs";
+import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
+function buildScoreRows(labels, values){
+    return Object.entries(labels).map(([key, label]) => {
+        const value = values[key];
+        const dots = [1, 2, 3, 4, 5].map(n => n <= value);
+        return { key, label, value, dots};
+    });
+}
 export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "actor", "ascended"],
-        position: {
-            width: 600,
-            height: 700
-        },
-        form: {
-            submitOnChange: true
+        position: { width: 600, height: 700 },
+        form: { submitOnChange: true },
+        actions: {
+            setScore: AscendedSheet.#onSetScore
         }
     };
 
@@ -43,6 +48,9 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const context = await super._prepareContext(options);
         context.actor = this.actor;
         context.system = this.actor.system;
+
+        context.attributeRows = buildScoreRows(ATTRIBUTE_LABELS, this.actor.system.attributes);
+        context.skillRows = buildScoreRows(SKILL_LABELS, this.actor.system.skills);
 
         context.god = this.actor.items.find(i => i.type === "god");
         context.archetype = this.actor.items.find(i => i.type === "archetype");
@@ -95,5 +103,16 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
 
         await this.actor.update(updateData);
         
+    }
+
+    static async #onSetScore(event, target) {
+        const group = target.dataset.group;
+        const key = target.dataset.key;
+        const clickedValue = Number(target.dataset.value);
+
+        const currentValue = this.actor.system[group][key];
+        const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
+
+        await this.actor.update({ [`system.${group}.${key}`] : newValue});
     }
 }

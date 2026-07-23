@@ -9,3 +9,11 @@ export const SKILL_LABELS = {
     survival: "Survival",
     craftsmanship: "Craftsmanship"
 }
+
+export const ATTRIBUTE_LABELS = {
+  strength: "Strength",
+  resistance: "Endurance",
+  mind: "Mind",
+  personality: "Personality",
+  reflexes: "Reflexes"
+};

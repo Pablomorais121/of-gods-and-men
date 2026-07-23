@@ -3,6 +3,7 @@ import GodData from "./data/item-god.mjs";
 import ArchetypeData from "./data/item-archetype.mjs";
 import NPCData from "./data/actor-npc.mjs";
 
+
 import AscendedSheet from "./sheets/ascended-sheet.mjs";
 import GodSheet from "./sheets/god-sheet.mjs";
 import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
@@ -21,7 +22,7 @@ Hooks.once("init", () => {
     const {Actors, Items} = foundry.documents.collections;
 
     Handlebars.registerHelper("includes", (arr, value) => arr.includes(value));
-
+    Handlebars.registerHelper ("add", (a, b) => a + b);
 
     Actors.registerSheet("of-gods-and-men", AscendedSheet, {
         types: ["ascended"],
