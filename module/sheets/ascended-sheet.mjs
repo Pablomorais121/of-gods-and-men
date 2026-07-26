@@ -14,7 +14,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         actions: {
             setScore: AscendedSheet.#onSetScore,
             setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks,
-            openRoll: AscendedSheet.#onOpenRoll
+            openRoll: AscendedSheet.#onOpenRoll,
+            toggleBlessing: AscendedSheet.#onToggleBlessing
         }
     };
 
@@ -74,6 +75,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             return { key, value: resource.value, max:resource.max, pct};
         });
 
+                context.blessingIsActive = this.actor.effects.some(e => e.getFlag("of-gods-and-men", "blessingEffect"));
+
         context.tabs = this._prepareTabs("primary");
 
         return context;
@@ -92,6 +95,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         if (context.tabs?.[partId]) {
             context.tab = context.tabs[partId];
         }
+
         return context;
     }
 
@@ -167,6 +171,47 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         await performRoll(this.actor, group, key);
     }
 
+    static async #onToggleBlessing(event, target) {
+        const god = this.actor.items.find(i => i.type === "god");
+        if(!god){
+            ui.notifications.warn("No God Assigned.");
+            return;
+        }
+        
+        const existing = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "blessingEffect"));
+        
+        if (existing) {
+            await existing.delete();
+            return;
+        }
+
+        const cost = god.system.blessing.cost;
+        const currentStamina = this.actor.system.resources.stamina.value;
+
+        if (currentStamina < cost){
+            ui.notifications.warn("Not enough Stamina to activate this blessing.");
+            return;
+        }
+
+        if (cost > 0){
+            await this.actor.update({ "system.resources.stamina.value": currentStamina - cost});
+        }
+
+        await this.actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: god.system.blessing.name || "Blessing",
+            img: god.img,
+            origin: god.uuid,
+            changes: [{
+                key: `system.${god.system.blessing.effectKey}`,
+                mode: 2, //ADD
+                value: god.system.blessing.effectValue,
+                priority: 20
+            }],
+            flags: {
+                "of-gods-and-men": {blessingEffect: true}
+            }
+        }]);
+    }
 
     get title(){
         return this.actor.name;

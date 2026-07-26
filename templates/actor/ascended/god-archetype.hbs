@@ -9,6 +9,9 @@
             <p><strong>Dogma:</strong> {{god.system.dogma.name}}</p>
             <p>{{{god.system.dogma.description}}}</p>
         </fieldset>
+        <button type="button" data-action="toggleBlessing">
+            {{#if blessingIsActive}}Deactivate{{else}}Activate{{/if}} Blessing
+        </button>
     {{else}}
         <p>Drag a God item here</p>
     {{/if}}
