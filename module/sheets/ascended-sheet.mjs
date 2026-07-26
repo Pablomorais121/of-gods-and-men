@@ -232,7 +232,42 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         
         if (!result) return;
 
-        console.log("Roll config:", {group, key, ...result});
+        const primaryValue = this.actor.system[group][key];
+
+        let secondaryValue;
+        if (result.secondaryKey) {
+            const secondaryGroup = ATTRIBUTE_LABELS[result.secondaryKey] ? "attributes" : "skills";
+            secondaryValue = this.actor.system[secondaryGroup][result.secondaryKey];
+        } else {
+            secondaryValue = primaryValue;
+        }
+        const modifier = primaryValue + secondaryValue;
+
+        let formula;
+        if (result.disadvantage) {
+            formula = `${modifier}`;
+        } else if (result.advantage){
+            formula = `2d12kh1 + ${modifier}`;
+        } else {
+            formula = `1d12 + ${modifier}`;
+        }
+
+        const roll = new Roll(formula);
+        await roll.evaluate();
+
+        let flavor = `<strong>${primaryLabel}</strong>`;
+        if (result.secondaryKey) {
+            const secondaryLabel = ATTRIBUTE_LABELS[result.secondaryKey] ?? SKILL_LABELS[result.secondaryKey];
+            flavor += ` + ${secondaryLabel}`
+        } else {
+            flavor += ` (x2)`; 
+        }
+        if (result.isAttack) flavor += ` - Attack Roll`;
+
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: this.actor}),
+            flavor
+        });
     }
 
     get title(){
