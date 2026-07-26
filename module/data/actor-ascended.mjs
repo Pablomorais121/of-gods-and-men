@@ -74,7 +74,7 @@ export default class AscendedData extends foundry.abstract.TypeDataModel {
 
      prepareDerivedData() {
             const attrs = this.attributes;
-            
+            this.npcBonus = 0;
             this.resources.health.max = 1 + attrs.strength + attrs.resistance;
             this.resources.stamina.max = 1 + attrs.resistance + attrs.reflexes;
             this.resources.sanity.max = 1 + attrs.mind + attrs.personality;

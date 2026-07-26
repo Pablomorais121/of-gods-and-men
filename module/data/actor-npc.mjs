@@ -68,6 +68,7 @@ export default class NPCData extends foundry.abstract.TypeDataModel {
 
     prepareDerivedData() {
         const {strength, resistance, reflexes, mind, personality} = this.attributes;
+        this.npcBonus = 1;
         this.resources.health.max = 1 + strength + resistance;
         this.resources.stamina.max = 1 + resistance + reflexes;
         this.resources.sanity.max = 1 + mind + personality;

@@ -17,7 +17,10 @@ Hooks.once("init", () => {
 
     CONFIG.Item.dataModels.god = GodData;
     CONFIG.Item.dataModels.archetype = ArchetypeData;
-    
+
+    CONFIG.Combat.initiative = {
+        formula: "@attributes.reflexes * 100 + @npcBonus",
+    }
 
     const {Actors, Items} = foundry.documents.collections;
 
@@ -95,6 +98,48 @@ Hooks.on("preCreateActor", (actor, data, options, userID) => {
         actor.updateSource({"prototypeToken.actorLink": true});
     }
 });
+
+Hooks.on("updateCombatant", async (combatant, changes, options) => {
+    if(options.ogmTieBreak) return;
+    if (changes.initiative === undefined) return;
+    if (!game.user.isGM) return;
+
+    const combat = combatant.combat;
+    if (!combat) return;
+    await resolvePcTies(combat);
+})
+
+async function resolvePcTies(combat) {
+    const pcCombatants = combat.combatants.filter(c => c.actor?.type === "ascended" && c.initiative !== null);
+
+    const groups = {};
+    for (const c of pcCombatants) {
+        groups[c.initiative] ??= [];
+        groups[c.initiative].push(c);
+    }
+    for (const tied of Object.values(groups)) {
+        if (tied.length < 2) continue;
+        await breakTie(tied);
+    }
+}
+
+async function breakTie(combatants) {
+    let rolls;
+    let allDistinct;
+
+    do {
+        rolls = await Promise.all(combatants.map(() => new Roll("1d12").evaluate()));
+        const values = rolls.map(r => r.total);
+        allDistinct = new Set(values).size === values.length;
+    } while (!allDistinct);
+
+    const updates = combatants.map((c, i) => ({
+        _id: c.id,
+        initiative: c.initiative + rolls[i].total / 100
+    }));
+
+    await combatants[0].combat.updateEmbeddedDocuments("Combatant", updates, { ogmTieBreak: true});
+}
 
 async function onDefendClick(message, button) {
     const data = message.flags["of-gods-and-men"];
