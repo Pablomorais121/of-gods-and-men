@@ -4,7 +4,7 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     
     static DEFAULT_OPTIONS ={
-        classes: ["of-gods-and-men", "sheet", "item", "god"],
+        classes: ["of-gods-and-men", "sheet", "item", "god", "ogm-sheet"],
         position: { width: 500, height: 600 },
         form: { submitOnChange: true },
         actions: {

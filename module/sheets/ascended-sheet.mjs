@@ -13,7 +13,7 @@ function buildScoreRows(labels, values){
 export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     static DEFAULT_OPTIONS ={
-        classes: ["of-gods-and-men", "sheet", "actor", "ascended", "ascended-sheet"],
+        classes: ["of-gods-and-men", "sheet", "actor", "ascended", "ogm-sheet"],
         position: { width: 650, height: 750 },
         form: { submitOnChange: true },
         actions: {

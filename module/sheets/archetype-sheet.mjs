@@ -6,7 +6,7 @@ const { ItemSheetV2 } = foundry.applications.sheets;
 export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     
     static DEFAULT_OPTIONS ={
-        classes: ["of-gods-and-men", "sheet", "item", "archetype"],
+        classes: ["of-gods-and-men", "sheet", "item", "archetype", "ogm-sheet"],
         position: { width: 500, height: 600},
         form: { submitOnChange: true },
         actions: {

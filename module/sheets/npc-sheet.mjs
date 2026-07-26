@@ -6,7 +6,7 @@ const { ActorSheetV2 } = foundry.applications.sheets;
 export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     static DEFAULT_OPTIONS ={
-        classes: ["of-gods-and-men", "sheet", "actor", "npc"],
+        classes: ["of-gods-and-men", "sheet", "actor", "npc", "ogm-sheet"],
         position: { width: 500, height: 600 },
         form: { submitOnChange: true }
     };

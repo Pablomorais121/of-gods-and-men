@@ -12,7 +12,7 @@
     --ogm-radius: 4px;
 }
 
-.ascended-sheet {
+.ogm-sheet {
     padding: 16px 24px;
     background: var(--ogm-parchment);
     color: var(--ogm-ink);
@@ -20,12 +20,12 @@
     font-size: 15px;
 }
 
-.ascended-sheet .window-content {
+.ogm-sheet .window-content {
     overflow-y: auto;
     height: 100%;
 }
 
-.ascended-sheet h1{
+.ogm-sheet h1{
     color: var(--ogm-ink);
     font-family: var(--ogm-font-display);
     font-weight: 700;
@@ -38,14 +38,14 @@
     padding-bottom: 12px;
 }
 
-.ascended-sheet fieldset{
+.ogm-sheet fieldset{
     border: 2px solid var(--ogm-border);
     border-radius: var(--ogm-radius);
     padding: 16px;
     margin: 0 0 16px 0;
 }
 
-.ascended-sheet legend {
+.ogm-sheet legend {
     font-family: var(--ogm-font-display);
     color: var(--ogm-ink);
     font-size: 1rem;
@@ -54,15 +54,15 @@
     padding: 0 12px;
 }
 
-.ascended-sheet legend::before {
+.ogm-sheet legend::before {
     content: "✦ "; 
 }
 
-.ascended-sheet legend::after {
+.ogm-sheet legend::after {
     content: " ✦"; 
 }
 
-.ascended-sheet label {
+.ogm-sheet label {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -71,8 +71,8 @@
     font-weight: 600;
 }
 
-.ascended-sheet input[type="number"],
-.ascended-sheet input[type="text"] {
+.ogm-sheet input[type="number"],
+.ogm-sheet input[type="text"] {
     font-family: var(--ogm-font-body);
     color: var(--ogm-ink);
     background: var(--ogm-parchment-dark);
@@ -83,18 +83,18 @@
     text-align: center;
 }
 
-.ascended-sheet .score-row{
+.ogm-sheet .score-row{
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 6px;
 }
 
-.ascended-sheet .score-dots{
+.ogm-sheet .score-dots{
     display: flex;
     gap: 4px;
 }
-.ascended-sheet .score-dot {
+.ogm-sheet .score-dot {
     width: 18px;
     height: 18px;
     border: 2px solid var(--ogm-border);
@@ -103,22 +103,22 @@
     background: transparent;
 }
 
-.ascended-sheet .score-dot.filled {
+.ogm-sheet .score-dot.filled {
     background-color: var(--ogm-ink);
 }
 
-.ascended-sheet .tab {
+.ogm-sheet .tab {
     padding: 4px 0;
 }
 
-.ascended-sheet .tabs {
+.ogm-sheet .tabs {
     display: flex;
     gap: 4px;
     border-bottom: 2px solid var(--ogm-border);
     margin-bottom: 16px;
 }
 
-.ascended-sheet .tabs a {
+.ogm-sheet .tabs a {
     font-family: var(--ogm-font-display);
     color: #6b5f4a;
     text-transform: uppercase;
@@ -132,11 +132,11 @@
     border-radius: var(--ogm-radius) var(--ogm-radius) 0 0;
 }
 
-.ascended-sheet .tabs a:hover{
+.ogm-sheet .tabs a:hover{
     opacity: var(--ogm-ink);
 }
 
-.ascended-sheet .tabs a.active {
+.ogm-sheet .tabs a.active {
     color: var(--ogm-ink);
     font-weight: 700;
     border-color: var(--ogm-border);
