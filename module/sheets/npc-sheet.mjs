@@ -30,6 +30,12 @@ export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         context.attributeRows = buildScoreRows(ATTRIBUTE_LABELS, this.actor.system.attributes);
         context.skillRows = buildScoreRows(SKILL_LABELS, this.actor.system.skills);
 
+        context.resourceBars = ["health", "stamina", "sanity"].map(key => {
+            const resource = this.actor.system.resources[key];
+            const pct = resource.max > 0 ? Math.round((resource.value / resource.max) * 100) : 0;
+            return { key, value: resource.value, max:resource.max, pct};
+        });
+
         return context;
     }
 
