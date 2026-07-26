@@ -1,7 +1,7 @@
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
 import { buildScoreRows } from "../utils.mjs";
 
-const { HandlebarsApplicationMixin} = foundry.applications.api;
+const { HandlebarsApplicationMixin, DialogV2} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
 
@@ -13,7 +13,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         form: { submitOnChange: true },
         actions: {
             setScore: AscendedSheet.#onSetScore,
-            setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks
+            setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks,
+            openRoll: AscendedSheet.#onOpenRoll
         }
     };
 
@@ -158,6 +159,80 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
 
         await this.actor.update({"system.dogmaBreaks": newValue });
+    }
+
+    static async #onOpenRoll(event, target) {
+        const group = target.dataset.group;
+        const key = target.dataset.key;
+        const primaryLabel = group === "attributes" ? ATTRIBUTE_LABELS[key] : SKILL_LABELS[key];
+
+        const otherOptions = [
+            ...Object.entries(ATTRIBUTE_LABELS).filter(([k]) => !(group === "attributes" && k === key)),
+            ...Object.entries(SKILL_LABELS).filter(([k]) => !(group === "skills" && k === key)),
+        ];
+
+        const optionsHtml = otherOptions
+            .map(([k, label]) => `<option value="${k}">${label}</option>`)
+            .join("");
+        
+        const result = await DialogV2.prompt({
+            window: {title: `Roll: ${primaryLabel}`},
+            content: `
+                <form>
+                    <div class="form-group">
+                        <label> Combine with</label>
+                        <select name="secondary">
+                            <option value="">None (double ${primaryLabel})</option>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="advantage"> Advantage</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="disadvantage"> Disadvantage</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="skillCheck"> Skill Check</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="attackRoll"> Attack Roll</label>
+                    </div>
+                </form>
+            `,
+            render: (event, dialog) => {
+                const skillCheckBox = dialog.element.querySelector('[name="skillCheck"]');
+                const attackRollBox = dialog.element.querySelector('[name="attackRoll"]');
+                const advantageBox = dialog.element.querySelector('[name="advantage"]');
+                const disadvantageBox = dialog.element.querySelector('[name="disadvantage"]');
+                
+                skillCheckBox.addEventListener("change", () => {
+                    if (skillCheckBox.checked) attackRollBox.checked = false;
+                });
+                attackRollBox.addEventListener("change", () => {
+                    if (attackRollBox.checked) skillCheckBox.checked = false;
+                });
+                advantageBox.addEventListener("change", () => {
+                    if (advantageBox.checked) disadvantageBox.checked = false;
+                });
+                disadvantageBox.addEventListener("change", () => {
+                    if (disadvantageBox.checked) advantageBox.checked = false;
+                });
+            },
+            ok: {
+                label: "Roll",
+                callback: (event, button) => ({
+                    secondaryKey: button.form.elements.secondary.value,
+                    advantage: button.form.elements.advantage.checked,
+                    disadvantage: button.form.elements.disadvantage.checked,
+                    isAttack: button.form.elements.attackRoll.checked
+                })
+            }
+        });
+        
+        if (!result) return;
+
+        console.log("Roll config:", {group, key, ...result});
     }
 
     get title(){

@@ -30,7 +30,13 @@
 
         {{#each attributeRows}}
             <div class="score-row">
-                <span class="score-label">{{this.label}}</span>
+                <span 
+                    class="score-label" 
+                    data-action="openRoll"
+                    data-group="attributes"
+                    data-key="{{this.key}}"
+                >{{this.label}}</span>
+
                 <div class="score-dots">
                     {{#each this.dots}}
                         <span
@@ -51,7 +57,13 @@
 
         {{#each skillRows}}
             <div class="score-row">
-                <span class="score-label">{{this.label}}</span>
+                <span 
+                class="score-label"
+                data-action="openRoll"
+                data-group="skills"
+                data-key="{{this.key}}"
+                >{{this.label}}</span>
+
                 <div class="score-dots">
                     {{#each this.dots}}
                         <span
