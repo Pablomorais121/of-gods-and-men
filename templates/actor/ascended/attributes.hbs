@@ -78,9 +78,18 @@
             <input type="number" name="system.divineHelpPoints" value="{{system.divineHelpPoints}}" min="0">
         </label>
 
-        <label>Dogma Breaks
-            <input type="number" name="system.dogmaBreaks" value="{{system.dogmaBreaks}}" min="0" max="3">
-        </label>
+        <div class="score-row">
+            <span class="score-label">Dogma Breaks</span>
+            <div class="score-dots">
+                {{#each dogmaDots}}
+                    <span
+                        class="score-dot {{#if this}}filled{{/if}}"
+                        data-action="setDogmaBreaks"
+                        data-value="{{add @index 1}}"
+                    ></span>
+                {{/each}}
+            </div>
+        </div>
 
     </fieldset>
 </div>

@@ -12,7 +12,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         position: { width: 650, height: 750 },
         form: { submitOnChange: true },
         actions: {
-            setScore: AscendedSheet.#onSetScore
+            setScore: AscendedSheet.#onSetScore,
+            setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks
         }
     };
 
@@ -55,10 +56,14 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
 
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
+
         context.actor = this.actor;
         context.system = this.actor.system;
+        
         context.attributeRows = buildScoreRows(ATTRIBUTE_LABELS, this.actor.system.attributes);
         context.skillRows = buildScoreRows(SKILL_LABELS, this.actor.system.skills);
+        context.dogmaDots = [1, 2, 3].map(n => n <= this.actor.system.dogmaBreaks);
+
         context.god = this.actor.items.find(i => i.type === "god");
         context.archetype = this.actor.items.find(i => i.type === "archetype");
 
@@ -139,6 +144,14 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
 
         await this.actor.update({ [`system.${group}.${key}`] : newValue});
+    }
+
+    static async #onSetDogmaBreaks(event, target) {
+        const clickedValue = Number(target.dataset.value);
+        const currentValue = this.actor.system.dogmaBreaks;
+        const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
+
+        await this.actor.update({"system.dogmaBreaks": newValue });
     }
 
     get title(){
