@@ -70,6 +70,7 @@
     gap: 8px;
     margin-bottom: 8px;
     font-weight: 600;
+    color: var(--ogm-ink)
 }
 
 .ogm-sheet input[type="number"],
@@ -106,6 +107,11 @@
 
 .ogm-sheet .score-dot.filled {
     background-color: var(--ogm-ink);
+}
+
+.ogm-sheet .score-label {
+    color: var(--ogm-ink);
+    font-weight: 600;
 }
 
 .ogm-sheet .tab {
