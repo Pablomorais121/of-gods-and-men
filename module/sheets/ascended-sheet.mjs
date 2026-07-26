@@ -1,15 +1,10 @@
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
+import { buildScoreRows } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
-function buildScoreRows(labels, values){
-    return Object.entries(labels).map(([key, label]) => {
-        const value = values[key];
-        const dots = [1, 2, 3, 4, 5].map(n => n <= value);
-        return { key, label, value, dots};
-    });
-}
+
 export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     static DEFAULT_OPTIONS ={

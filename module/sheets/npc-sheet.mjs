@@ -1,4 +1,5 @@
-import { SKILL_LABELS } from "../constants.mjs";
+import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
+import { buildScoreRows } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -8,7 +9,10 @@ export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "actor", "npc", "ogm-sheet"],
         position: { width: 500, height: 600 },
-        form: { submitOnChange: true }
+        form: { submitOnChange: true },
+        actions:{
+            setScore: NPCSheet.#onSetScore
+        }
     };
 
     static PARTS = {
@@ -20,9 +24,28 @@ export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
+
         context.actor = this.actor;
         context.system = this.actor.system;
+        context.attributeRows = buildScoreRows(ATTRIBUTE_LABELS, this.actor.system.attributes);
+        context.skillRows = buildScoreRows(SKILL_LABELS, this.actor.system.skills);
+
         return context;
+    }
+
+    static async #onSetScore(event, target) {
+        const group = target.dataset.group;
+        const key = target.dataset.key;
+        const clickedValue = Number(target.dataset.value);
+
+        const currentValue = this.actor.system[group][key];
+        const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
+
+        await this.actor.update({ [`system.${group}.${key}`] : newValue});
+    }
+
+    get title(){
+        return this.actor.name;
     }
 
 }
