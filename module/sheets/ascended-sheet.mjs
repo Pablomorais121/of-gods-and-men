@@ -166,26 +166,35 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const key = target.dataset.key;
         const primaryLabel = group === "attributes" ? ATTRIBUTE_LABELS[key] : SKILL_LABELS[key];
 
-        const otherOptions = [
-            ...Object.entries(ATTRIBUTE_LABELS).filter(([k]) => !(group === "attributes" && k === key)),
-            ...Object.entries(SKILL_LABELS).filter(([k]) => !(group === "skills" && k === key)),
-        ];
-
-        const optionsHtml = otherOptions
+        const attributeOptionsHtml = Object.entries(ATTRIBUTE_LABELS)
+            .filter(([k]) => !(group === "attributes" && k === key ))
             .map(([k, label]) => `<option value="${k}">${label}</option>`)
             .join("");
         
+        const skillOptionsHtml = Object.entries(SKILL_LABELS)
+            .filter(([k]) => !(group === "skills" && k === key ))
+            .map(([k, label]) => `<option value="${k}">${label}</option>`)
+            .join(""); 
+
         const result = await DialogV2.prompt({
             window: {title: `Roll: ${primaryLabel}`},
             content: `
                 <form>
                     <div class="form-group">
-                        <label> Combine with</label>
-                        <select name="secondary">
-                            <option value="">None (double ${primaryLabel})</option>
-                            ${optionsHtml}
+                        <label>Attribute</label>
+                            <select name="secondaryAttribute">
+                                <option value="">None</option>
+                                ${attributeOptionsHtml}
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Skill</label>
+                        <select name="secondarySkill">
+                            <option value="">None</option>
+                            ${skillOptionsHtml}
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label><input type="checkbox" name="advantage"> Advantage</label>
                     </div>
@@ -193,7 +202,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
                         <label><input type="checkbox" name="disadvantage"> Disadvantage</label>
                     </div>
                     <div class="form-group">
-                        <label><input type="checkbox" name="skillCheck"> Skill Check</label>
+                        <label><input type="checkbox" name="skillCheck" checked> Skill Check</label>
                     </div>
                     <div class="form-group">
                         <label><input type="checkbox" name="attackRoll"> Attack Roll</label>
@@ -205,7 +214,15 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
                 const attackRollBox = dialog.element.querySelector('[name="attackRoll"]');
                 const advantageBox = dialog.element.querySelector('[name="advantage"]');
                 const disadvantageBox = dialog.element.querySelector('[name="disadvantage"]');
+                const attributeSelect = dialog.element.querySelector('[name="secondaryAttribute"]');
+                const skillSelect = dialog.element.querySelector('[name="secondarySkill"]');
                 
+                attributeSelect.addEventListener("change", () => {
+                    if (attributeSelect.value) skillSelect.value = "";
+                })
+                skillSelect.addEventListener("change", () => {
+                    if (skillSelect.value) attributeSelect.value = "";
+                })
                 skillCheckBox.addEventListener("change", () => {
                     if (skillCheckBox.checked) attackRollBox.checked = false;
                 });
@@ -222,7 +239,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             ok: {
                 label: "Roll",
                 callback: (event, button) => ({
-                    secondaryKey: button.form.elements.secondary.value,
+                    secondaryAttribute: button.form.elements.secondaryAttribute.value,
+                    secondarySkill: button.form.elements.secondarySkill.value,
                     advantage: button.form.elements.advantage.checked,
                     disadvantage: button.form.elements.disadvantage.checked,
                     isAttack: button.form.elements.attackRoll.checked
@@ -232,12 +250,13 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         
         if (!result) return;
 
-        const primaryValue = this.actor.system[group][key];
+        const primaryValue = this.actor.system[group][key]
+        const secondaryKey = result.secondaryAttribute || result.secondarySkill;
+        const secondaryGroup = result.secondaryAttribute ? "attributes" : "skills";
 
         let secondaryValue;
-        if (result.secondaryKey) {
-            const secondaryGroup = ATTRIBUTE_LABELS[result.secondaryKey] ? "attributes" : "skills";
-            secondaryValue = this.actor.system[secondaryGroup][result.secondaryKey];
+        if (secondaryKey) {
+            secondaryValue = this.actor.system[secondaryGroup][secondaryKey]
         } else {
             secondaryValue = primaryValue;
         }
@@ -255,13 +274,26 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const roll = new Roll(formula);
         await roll.evaluate();
 
+        let critical = false;
+        let fumble = false;
+
+        if (!result.disadvantage) {
+            const dieTerm = roll.terms.find(t => Array.isArray(t.results));
+            const activeResult = dieTerm.results.find(r => r.active);
+
+            if (activeResult.result === 12) critical = true;
+            if (activeResult.result === 1) fumble = true;
+        }
+
         let flavor = `<strong>${primaryLabel}</strong>`;
-        if (result.secondaryKey) {
-            const secondaryLabel = ATTRIBUTE_LABELS[result.secondaryKey] ?? SKILL_LABELS[result.secondaryKey];
+        if (secondaryKey) {
+            const secondaryLabel = ATTRIBUTE_LABELS[secondaryKey] ?? SKILL_LABELS[secondaryKey];
             flavor += ` + ${secondaryLabel}`
         } else {
             flavor += ` (x2)`; 
         }
+        if (critical) flavor += `<br><strong style="color: #8a1f1f;">✦ CRITICAL!</strong>`;
+        if (fumble) flavor += `<br><strong style="color: #8a1f1f;">✦ FUMBLE!</strong>`;
         if (result.isAttack) flavor += ` - Attack Roll`;
 
         await roll.toMessage({
