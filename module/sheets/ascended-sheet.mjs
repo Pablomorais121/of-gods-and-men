@@ -13,7 +13,7 @@ function buildScoreRows(labels, values){
 export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
 
     static DEFAULT_OPTIONS ={
-        classes: ["of-gods-and-men", "sheet", "actor", "ascended"],
+        classes: ["of-gods-and-men", "sheet", "actor", "ascended", "ascended-sheet"],
         position: { width: 650, height: 750 },
         form: { submitOnChange: true },
         actions: {
@@ -144,5 +144,9 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
 
         await this.actor.update({ [`system.${group}.${key}`] : newValue});
+    }
+
+    get title(){
+        return this.actor.name;
     }
 }

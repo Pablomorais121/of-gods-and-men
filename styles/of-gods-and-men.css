@@ -13,13 +13,16 @@
 }
 
 .ascended-sheet {
-    overflow-y: auto;
-    height: 100%;
     padding: 16px 24px;
     background: var(--ogm-parchment);
     color: var(--ogm-ink);
     font-family: var(--ogm-font-body);
     font-size: 15px;
+}
+
+.ascended-sheet .window-content {
+    overflow-y: auto;
+    height: 100%;
 }
 
 .ascended-sheet h1{
@@ -104,20 +107,38 @@
     background-color: var(--ogm-ink);
 }
 
-.npc-sheet {
-    overflow-y: auto;
-    height: 100%;
-    padding: 8px;
+.ascended-sheet .tab {
+    padding: 4px 0;
 }
 
-.god-sheet {
-    overflow-y: auto;
-    height: 100%;
-    padding: 8px;
+.ascended-sheet .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--ogm-border);
+    margin-bottom: 16px;
 }
 
-.archetype-sheet {
-    overflow-y: auto;
-    height: 100%;
-    padding: 8px;
+.ascended-sheet .tabs a {
+    font-family: var(--ogm-font-display);
+    color: #6b5f4a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--ogm-radius) var(--ogm-radius) 0 0;
+}
+
+.ascended-sheet .tabs a:hover{
+    opacity: var(--ogm-ink);
+}
+
+.ascended-sheet .tabs a.active {
+    color: var(--ogm-ink);
+    font-weight: 700;
+    border-color: var(--ogm-border);
+    background: var(--ogm-parchment-dark);
 }

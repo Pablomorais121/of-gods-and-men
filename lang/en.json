@@ -1,1 +1,12 @@
-{}
+{
+  "TYPES": {
+    "Actor": {
+      "ascended": "Ascended",
+      "npc": "NPC"
+    },
+    "Item": {
+      "god": "God",
+      "archetype": "Archetype"
+    }
+  }
+}
