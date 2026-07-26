@@ -115,7 +115,7 @@ async function onDefendClick(message, button) {
     await defenseRoll.evaluate();
 
     const success = defenseRoll.total >= data.attackTotal;
-    const damage = success ? 0 : data.attackerStrength;
+    const damage = success ? 0 : data.attackerStrength + 1;
 
     let flavor = `<strong>${targetActor.name}</strong> ${defenseType === "block" ? "blocks" : "dodges"}!<br>`;
     flavor += success ? `<strong>Success!</strong>` : `<strong>Failed!</strong> Takes ${damage} damage.`;
