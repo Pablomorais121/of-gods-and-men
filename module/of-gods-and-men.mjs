@@ -90,6 +90,12 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
   });
 });
 
+Hooks.on("preCreateActor", (actor, data, options, userID) => {
+    if (actor.type === "ascended") {
+        actor.updateSource({"prototypeToken.actorLink": true});
+    }
+});
+
 async function onDefendClick(message, button) {
     const data = message.flags["of-gods-and-men"];
     if (!data) return;
