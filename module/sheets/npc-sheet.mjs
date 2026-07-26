@@ -1,5 +1,5 @@
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
-import { buildScoreRows } from "../utils.mjs";
+import { buildScoreRows, performRoll } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -11,7 +11,8 @@ export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         position: { width: 500, height: 600 },
         form: { submitOnChange: true },
         actions:{
-            setScore: NPCSheet.#onSetScore
+            setScore: NPCSheet.#onSetScore,
+            openRoll: NPCSheet.#onOpenRoll
         }
     };
 
@@ -48,6 +49,12 @@ export default class NPCSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
         const newValue = clickedValue === currentValue ? clickedValue -1 : clickedValue;
 
         await this.actor.update({ [`system.${group}.${key}`] : newValue});
+    }
+
+    static async #onOpenRoll(event, target) {
+        const group = target.dataset.group;
+        const key = target.dataset.key;
+        await performRoll(this.actor, group, key);
     }
 
     get title(){
