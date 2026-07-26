@@ -67,6 +67,12 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         context.god = this.actor.items.find(i => i.type === "god");
         context.archetype = this.actor.items.find(i => i.type === "archetype");
 
+        context.resourceBars = ["health", "stamina", "sanity"].map(key => {
+            const resource = this.actor.system.resources[key];
+            const pct = resource.max > 0 ? Math.round((resource.value / resource.max) * 100) : 0;
+            return { key, value: resource.value, max:resource.max, pct};
+        });
+
         context.tabs = this._prepareTabs("primary");
 
         return context;

@@ -143,3 +143,49 @@
     border-color: var(--ogm-border);
     background: var(--ogm-parchment-dark);
 }
+
+.ogm-sheet .resource-cards {
+    display: flex;
+    gap: 12px;
+}
+
+.ogm-sheet .resource-card {
+    flex: 1;
+    text-align: center;
+}
+
+.ogm-sheet .resource-name {
+    display: block;
+    font-family: var(--ogm-font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+    margin-bottom: 4px
+}
+
+.ogm-sheet .resource-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.ogm-sheet .resource-numbers input {
+    font-size: 1.4rem;
+    font-weight: 700;
+    width: 45px;
+}
+
+.ogm-sheet .resource-bar{
+    height: 6px;
+    background: var(--ogm-parchment-dark);
+    border: 1px solid var(--ogm-border);
+    border-radius:3px;
+    overflow: hidden;
+}
+
+.ogm-sheet .resource-bar-fill {
+    height: 100%;
+    background: var(--ogm-ink)
+}

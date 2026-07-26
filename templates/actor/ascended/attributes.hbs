@@ -9,20 +9,20 @@
     <fieldset>
         <legend>Resources</legend>
 
-        <label>Health
-            <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" min="0">
-            / {{system.resources.health.max}}
-        </label>
-
-        <label>Stamina
-            <input type="number" name="system.resources.stamina.value" value="{{system.resources.stamina.value}}" min="0">
-            / {{system.resources.stamina.max}}
-        </label>
-
-        <label>Sanity
-            <input type="number" name="system.resources.sanity.value" value="{{system.resources.sanity.value}}" min="0">
-            / {{system.resources.sanity.max}}
-        </label>
+        <div class="resource-cards">
+            {{#each resourceBars}}
+                <div class="resource-card">
+                    <span class="resource-name">{{this.key}}</span>
+                    <div class="resource-numbers">
+                        <input type="number" name="system.resources.{{this.key}}.value" value="{{this.value}}" min="0">
+                        <span>/ {{this.max}} </span>
+                    </div>
+                    <div class="resource-bar">
+                        <div class="resource-bar-fill" style="width: {{this.pct}}%;"></div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
     </fieldset>
 
     <fieldset>
