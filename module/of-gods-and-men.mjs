@@ -81,3 +81,48 @@ Hooks.on("preUpdateActor", (actor, changes, options, userID) => {
         changes.system.resources.sanity = { value: sanityMax };
     }
 });
+
+Hooks.on("renderChatMessageHTML", (message, html) => {
+  const buttons = html.querySelectorAll('[data-action="defend"]');
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => onDefendClick(message, button));
+  });
+});
+
+async function onDefendClick(message, button) {
+    const data = message.flags["of-gods-and-men"];
+    if (!data) return;
+
+    const defenseType = button.dataset.defense;
+    const targetActor = game.actors.get(data.targetActorId);
+
+    if(!targetActor) {
+        ui.notifications.error("target actor not found.");
+        return;
+    }
+
+    const defenseAttribute = defenseType === "block" ? "strength" : "reflexes";
+    const defenseValue = targetActor.system.attributes[defenseAttribute];
+
+    const defenseRoll = new Roll(`1d12 + ${defenseValue}`);
+    await defenseRoll.evaluate();
+
+    const success = defenseRoll.total >= data.attackTotal;
+    const damage = success ? 0 : data.attackerStrength;
+
+    let flavor = `<strong>${targetActor.name}</strong> ${defenseType === "block" ? "blocks" : "dodges"}!<br>`;
+    flavor += success ? `<strong>Success!</strong>` : `<strong>Failed!</strong> Takes ${damage} damage.`;
+
+    await defenseRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: targetActor }),
+        flavor
+    });
+
+    if (!success) {
+        const newHealth = Math.max(0, targetActor.system.resources.health.value - damage );
+        await targetActor.update({ "system.resources.health.value": newHealth});
+    }
+
+    button.closest(".attack-buttons").remove();
+}

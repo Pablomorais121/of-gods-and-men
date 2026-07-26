@@ -296,9 +296,34 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         if (fumble) flavor += `<br><strong style="color: #8a1f1f;">✦ FUMBLE!</strong>`;
         if (result.isAttack) flavor += ` - Attack Roll`;
 
+        let messageFlags = {};
+        
+        if (result.isAttack) {
+            const target = game.user.targets.first();
+
+            if (!target) {
+                ui.notifications.warn("No target selected for this attack.");
+            }else{
+                messageFlags["of-gods-and-men"] = {
+                    attackerActorId: this.actor.id,
+                    attackerStrength: this.actor.system.attributes.strength,
+                    attackTotal: roll.total,
+                    targetActorId: target.actor.id
+                };
+
+                flavor += `
+                    <div class="attack-buttons">
+                        <button type="button" data-action="defend" data-defense="block"> Block </button>
+                        <button type="button" data-action="defend" data-defense="dodge"> Dodge </button>
+                    </div>
+                `;
+            }
+        }
+
         await roll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: this.actor}),
-            flavor
+            flavor,
+            flags: messageFlags
         });
     }
 
