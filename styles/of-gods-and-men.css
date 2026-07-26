@@ -25,7 +25,8 @@
     height: 100%;
 }
 
-.ogm-sheet h1{
+
+.ogm-sheet .window-content h1{
     color: var(--ogm-ink);
     font-family: var(--ogm-font-display);
     font-weight: 700;
