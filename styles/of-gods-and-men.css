@@ -133,7 +133,7 @@
 }
 
 .ogm-sheet .tabs a:hover{
-    opacity: var(--ogm-ink);
+    color: var(--ogm-ink);
 }
 
 .ogm-sheet .tabs a.active {
