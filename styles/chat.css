@@ -57,6 +57,7 @@
 }
 
 .ogm-chat-card .attack-buttons button {
+  flex: 1;
   font-family: var(--ogm-font-display);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -85,4 +86,23 @@
   color: var(--ogm-ink);
   background: var(--ogm-parchment-dark);
   border: 1px solid var(--ogm-border);
+}
+
+.ogm-chat-card .roll-outcome {
+  margin-top: 8px;
+  font-family: var(--ogm-font-display);
+  font-weight: 700;
+  text-align: center;
+  padding: 4px;
+  border-radius: var(--ogm-radius);
+}
+
+.ogm-chat-card .roll-outcome.outcome-success {
+  background: var(--ogm-parchment-dark);
+  color: var(--ogm-ink);
+}
+
+.ogm-chat-card .roll-outcome.outcome-fail {
+  background: #8a1f1f;
+  color: var(--ogm-parchment);
 }

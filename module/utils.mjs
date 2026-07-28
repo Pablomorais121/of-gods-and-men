@@ -135,8 +135,11 @@ export  async function performRoll(actor, group, key) {
         const secondaryLabel = secondaryKey ? (ATTRIBUTE_LABELS[secondaryKey] ?? SKILL_LABELS[secondaryKey]) : null;
         const rollHTML = await roll.render();
 
+        let title = primaryLabel;
+        title += secondaryKey ? ` + ${secondaryLabel}` : ` (x2)`;
+
         const templateData = {
-            primaryLabel,
+            title,
             secondaryLabel,
             critical,
             fumble,
@@ -198,20 +201,29 @@ export async function onDefendClick(message, button) {
     const success = defenseRoll.total >= data.attackTotal;
     const damage = success ? 0 : data.attackerStrength + 1;
 
-    let flavor = `<strong>${targetActor.name}</strong> ${defenseType === "block" ? "blocks" : "dodges"}!<br>`;
-    flavor += success ? `<strong>Success!</strong>` : `<strong>Failed!</strong> Takes ${damage} damage.`;
+    const rollHTML = await defenseRoll.render();
 
-    await defenseRoll.toMessage({
+    const templateData = {
+        title: `${targetActor.name} ${defenseType === "block" ? "Blocks" : "Dodges"}`,
+        critical: false,
+        fumble: false,
+        isAttack: false,
+        rollHTML,
+        showAttackButtons: false,
+        outcome: success ? "Success!" : `Failed! Takes ${damage} damage.`,
+        outcomeClass: success ? "outcome-success" : "outcome-fail"
+    };
+
+    const content = await foundry.applications.handlebars.renderTemplate(
+        "systems/of-gods-and-men/templates/chat/roll-card.hbs",
+        templateData
+    );
+
+    await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: targetActor }),
-        flavor
+        content,
+        rolls: [defenseRoll]
     });
-
-    if (!success) {
-        const newHealth = Math.max(0, targetActor.system.resources.health.value - damage );
-        await targetActor.update({ "system.resources.health.value": newHealth});
-    }
-
-    button.closest(".attack-buttons").remove();
 }
 
 export async function resolvePcTies(combat) {

@@ -1,14 +1,16 @@
 <div class="ogm-chat-card">
   <div class="roll-header">
-    <span class="roll-title">
-      {{primaryLabel}}{{#if secondaryLabel}} + {{secondaryLabel}}{{else}} (x2){{/if}}
-    </span>
+    <span class="roll-title">{{title}}</span>
     {{#if isAttack}}<span class="badge badge-attack">Attack</span>{{/if}}
-    {{#if critical}}<span class="badge badge-crit">✦ Critical ✦</span>{{/if}}
-    {{#if fumble}}<span class="badge badge-fumble">✦ Fumble ✦</span>{{/if}}
+    {{#if critical}}<span class="badge badge-crit">✦ Critical</span>{{/if}}
+    {{#if fumble}}<span class="badge badge-fumble">✦ Fumble</span>{{/if}}
   </div>
 
   {{{rollHTML}}}
+
+  {{#if outcome}}
+    <div class="roll-outcome {{outcomeClass}}">{{outcome}}</div>
+  {{/if}}
 
   {{#if showAttackButtons}}
     <div class="attack-buttons">
