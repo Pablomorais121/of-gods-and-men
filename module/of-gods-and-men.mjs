@@ -9,7 +9,7 @@ import GodSheet from "./sheets/god-sheet.mjs";
 import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
 import NPCSheet from "./sheets/npc-sheet.mjs";
 
-import { resolvePcTies } from "./utils.mjs";
+import { resolvePcTies, onDefendClick } from "./utils.mjs";
 
 Hooks.once("init", () => {
     console.log("Of Gods and Men | Initializing System");

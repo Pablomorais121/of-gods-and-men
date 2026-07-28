@@ -132,81 +132,52 @@ export  async function performRoll(actor, group, key) {
             if (activeResult.result === 1) fumble = true;
         }
 
-        let flavor = `<strong>${primaryLabel}</strong>`;
-        if (secondaryKey) {
-            const secondaryLabel = ATTRIBUTE_LABELS[secondaryKey] ?? SKILL_LABELS[secondaryKey];
-            flavor += ` + ${secondaryLabel}`
-        } else {
-            flavor += ` (x2)`; 
-        }
-        if (critical) flavor += `<br><strong style="color: #8a1f1f;">✦ CRITICAL!</strong>`;
-        if (fumble) flavor += `<br><strong style="color: #8a1f1f;">✦ FUMBLE!</strong>`;
-        if (result.isAttack) flavor += ` - Attack Roll`;
+        const secondaryLabel = secondaryKey ? (ATTRIBUTE_LABELS[secondaryKey] ?? SKILL_LABELS[secondaryKey]) : null;
+        const rollHTML = await roll.render();
+
+        const templateData = {
+            primaryLabel,
+            secondaryLabel,
+            critical,
+            fumble,
+            isAttack: result.isAttack,
+            rollHTML,
+            showAttackButtons: false
+        };
 
         let messageFlags = {};
-        
+
         if (result.isAttack) {
             const target = game.user.targets.first();
 
             if (!target) {
-                ui.notifications.warn("No target selected for this attack.");
-            }else{
+                ui.notifications.warn("No target selected for this attack");
+            } else {
                 messageFlags["of-gods-and-men"] = {
                     attackerActorId: actor.id,
                     attackerStrength: actor.system.attributes.strength,
                     attackTotal: roll.total,
                     targetActorId: target.actor.id
                 };
-
-                flavor += `
-                    <div class="attack-buttons">
-                        <button type="button" data-action="defend" data-defense="block"> Block </button>
-                        <button type="button" data-action="defend" data-defense="dodge"> Dodge </button>
-                    </div>
-                `;
+                templateData.showAttackButtons = true;
             }
         }
 
-        await roll.toMessage({
-            speaker: ChatMessage.getSpeaker({ actor: actor}),
-            flavor,
+        const content = await foundry.applications.handlebars.renderTemplate(
+            "systems/of-gods-and-men/templates/chat/roll-card.hbs",
+            templateData
+        );
+
+        await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content,
+            rolls: [roll],
+            sound: CONFIG.sounds.dice,
             flags: messageFlags
         });
     }
 
-export async function resolvePcTies(combat) {
-    const pcCombatants = combat.combatants.filter(c => c.actor?.type === "ascended" && c.initiative !== null);
-
-    const groups = {};
-    for (const c of pcCombatants) {
-        groups[c.initiative] ??= [];
-        groups[c.initiative].push(c);
-    }
-    for (const tied of Object.values(groups)) {
-        if (tied.length < 2) continue;
-        await breakTie(tied);
-    }
-}
-
-async function breakTie(combatants) {
-    let rolls;
-    let allDistinct;
-
-    do {
-        rolls = await Promise.all(combatants.map(() => new Roll("1d12").evaluate()));
-        const values = rolls.map(r => r.total);
-        allDistinct = new Set(values).size === values.length;
-    } while (!allDistinct);
-
-    const updates = combatants.map((c, i) => ({
-        _id: c.id,
-        initiative: c.initiative + rolls[i].total / 100
-    }));
-
-    await combatants[0].combat.updateEmbeddedDocuments("Combatant", updates, { ogmTieBreak: true});
-}
-
-async function onDefendClick(message, button) {
+export async function onDefendClick(message, button) {
     const data = message.flags["of-gods-and-men"];
     if (!data) return;
 
@@ -242,3 +213,36 @@ async function onDefendClick(message, button) {
 
     button.closest(".attack-buttons").remove();
 }
+
+export async function resolvePcTies(combat) {
+    const pcCombatants = combat.combatants.filter(c => c.actor?.type === "ascended" && c.initiative !== null);
+
+    const groups = {};
+    for (const c of pcCombatants) {
+        groups[c.initiative] ??= [];
+        groups[c.initiative].push(c);
+    }
+    for (const tied of Object.values(groups)) {
+        if (tied.length < 2) continue;
+        await breakTie(tied);
+    }
+}
+
+async function breakTie(combatants) {
+    let rolls;
+    let allDistinct;
+
+    do {
+        rolls = await Promise.all(combatants.map(() => new Roll("1d12").evaluate()));
+        const values = rolls.map(r => r.total);
+        allDistinct = new Set(values).size === values.length;
+    } while (!allDistinct);
+
+    const updates = combatants.map((c, i) => ({
+        _id: c.id,
+        initiative: c.initiative + rolls[i].total / 100
+    }));
+
+    await combatants[0].combat.updateEmbeddedDocuments("Combatant", updates, { ogmTieBreak: true});
+}
+
