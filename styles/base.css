@@ -83,3 +83,70 @@
     padding: 4px 6px;
     text-align: center;
 }
+
+.ogm-roll-dialog {
+  font-family: var(--ogm-font-body);
+  color: var(--ogm-ink);
+}
+
+.ogm-roll-dialog .window-content {
+  background: var(--ogm-parchment);
+}
+
+.ogm-roll-dialog label {
+  font-family: var(--ogm-font-display);
+  color: var(--ogm-ink);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ogm-roll-dialog .ogm-roll-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ogm-roll-dialog .ogm-roll-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ogm-roll-dialog select {
+  font-family: var(--ogm-font-body);
+  color: var(--ogm-ink);
+  background: var(--ogm-parchment-dark);
+  border: 1px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  padding: 4px;
+}
+
+.ogm-roll-dialog .ogm-roll-toggles {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.ogm-roll-dialog .ogm-toggle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: 1px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  background: var(--ogm-parchment-dark);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.ogm-roll-dialog .ogm-toggle input[type="checkbox"] {
+  display: none;
+}
+
+.ogm-roll-dialog .ogm-toggle:has(input:checked) {
+  background: var(--ogm-ink);
+  color: var(--ogm-parchment);
+}

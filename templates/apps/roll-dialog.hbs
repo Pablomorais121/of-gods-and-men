@@ -1,0 +1,44 @@
+<form>
+  <div class="ogm-roll-row">
+    <div class="ogm-roll-field">
+      <label>Attribute</label>
+      <select name="secondaryAttribute">
+        <option value="">None</option>
+        {{#each attributeOptions}}
+          <option value="{{this.key}}">{{this.label}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="ogm-roll-field">
+      <label>Skill</label>
+      <select name="secondarySkill">
+        <option value="">None</option>
+        {{#each skillOptions}}
+          <option value="{{this.key}}">{{this.label}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+
+  <div class="ogm-roll-toggles">
+    <label class="ogm-toggle">
+      <input type="checkbox" name="advantage">
+      <span>Advantage</span>
+    </label>
+    <label class="ogm-toggle">
+      <input type="checkbox" name="disadvantage">
+      <span>Disadvantage</span>
+    </label>
+  </div>
+
+  <div class="ogm-roll-toggles">
+    <label class="ogm-toggle">
+      <input type="checkbox" name="skillCheck" checked>
+      <span>Skill Check</span>
+    </label>
+    <label class="ogm-toggle">
+      <input type="checkbox" name="attackRoll">
+      <span>Attack Roll</span>
+    </label>
+  </div>
+</form>

@@ -13,49 +13,23 @@ export function buildScoreRows(labels, values){
 export  async function performRoll(actor, group, key) {
         const primaryLabel = group === "attributes" ? ATTRIBUTE_LABELS[key] : SKILL_LABELS[key];
 
-        const attributeOptionsHtml = Object.entries(ATTRIBUTE_LABELS)
+        const attributeOptions = Object.entries(ATTRIBUTE_LABELS)
             .filter(([k]) => !(group === "attributes" && k === key ))
-            .map(([k, label]) => `<option value="${k}">${label}</option>`)
-            .join("");
+            .map(([k, label]) => ({ key: k, label}));
         
-        const skillOptionsHtml = Object.entries(SKILL_LABELS)
+        const skillOptions = Object.entries(SKILL_LABELS)
             .filter(([k]) => !(group === "skills" && k === key ))
-            .map(([k, label]) => `<option value="${k}">${label}</option>`)
-            .join(""); 
+            .map(([k, label]) => ({ key: k, label}));
 
+        const dialogContent = await foundry.applications.handlebars.renderTemplate(
+            "systems/of-gods-and-men/templates/apps/roll-dialog.hbs",
+            {attributeOptions, skillOptions}
+        )
         const result = await DialogV2.prompt({
             window: {title: `Roll: ${primaryLabel}`},
-            content: `
-                <form>
-                    <div class="form-group">
-                        <label>Attribute</label>
-                            <select name="secondaryAttribute">
-                                <option value="">None</option>
-                                ${attributeOptionsHtml}
-                            </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Skill</label>
-                        <select name="secondarySkill">
-                            <option value="">None</option>
-                            ${skillOptionsHtml}
-                        </select>
-                    </div>
+            classes: ["ogm-roll-dialog"],
+            content: dialogContent,
 
-                    <div class="form-group">
-                        <label><input type="checkbox" name="advantage"> Advantage</label>
-                    </div>
-                    <div class="form-group">
-                        <label><input type="checkbox" name="disadvantage"> Disadvantage</label>
-                    </div>
-                    <div class="form-group">
-                        <label><input type="checkbox" name="skillCheck" checked> Skill Check</label>
-                    </div>
-                    <div class="form-group">
-                        <label><input type="checkbox" name="attackRoll"> Attack Roll</label>
-                    </div>
-                </form>
-            `,
             render: (event, dialog) => {
                 const skillCheckBox = dialog.element.querySelector('[name="skillCheck"]');
                 const attackRollBox = dialog.element.querySelector('[name="attackRoll"]');
@@ -178,7 +152,7 @@ export  async function performRoll(actor, group, key) {
             sound: CONFIG.sounds.dice,
             flags: messageFlags
         });
-    }
+}
 
 export async function onDefendClick(message, button) {
     const data = message.flags["of-gods-and-men"];
