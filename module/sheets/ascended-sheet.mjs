@@ -1,5 +1,5 @@
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
-import { buildScoreRows, performRoll } from "../utils.mjs";
+import { buildScoreRows, performRoll, postEffectMessage } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -185,6 +185,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         
         if (existing) {
             await existing.delete();
+            await postEffectMessage(this.actor, {action: "deactivate", name: god.system.blessing.name});
             return;
         }
 
@@ -214,6 +215,17 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
                 "of-gods-and-men": {blessingEffect: true}
             }
         }]);
+
+        await postEffectMessage (
+            this.actor, 
+            { 
+                action: "activate", 
+                name: god.system.blessing.name, 
+                cost, 
+                costResource: "Stamina", 
+                effectKey: god.system.blessing.effectKey,
+                effectValue: god.system.blessing.effectValue
+            });
     }
 
     static async #onToggleSpell(event, target) {
@@ -228,6 +240,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         if(existing) {
             const wasThisSpell = existing.getFlag("of-gods-and-men", "spellIndex") === index;
             await existing.delete();
+            await postEffectMessage(this.actor, {action: "deactivate", name: spell.name });
             if (wasThisSpell) return;
         }
 
@@ -255,6 +268,17 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
                 "of-gods-and-men": { spellEffect: true, spellIndex: index}
             }
         }]);
+
+        await postEffectMessage (
+            this.actor, 
+            { 
+                action: "activate", 
+                name: spell.name, 
+                cost: spell.cost, 
+                costResource: "Sanity", 
+                effectKey: spell.effectKey,
+                effectValue: spell.effectValue
+            });
     }
 
     get title(){

@@ -240,3 +240,34 @@ async function breakTie(combatants) {
     await combatants[0].combat.updateEmbeddedDocuments("Combatant", updates, { ogmTieBreak: true});
 }
 
+function labelForEffectKey(effectKey) {
+    if (!effectKey) return null;
+    const [group, key] = effectKey.split(".");
+    const labels = group === "attributes" ? ATTRIBUTE_LABELS : SKILL_LABELS;
+    return labels?.[key] ?? effectKey;
+}
+
+export async function postEffectMessage(actor, { action, name, cost, costResource, effectKey, effectValue }) {
+    const title = action === "activate"
+        ? `${actor.name} activates ${name}`
+        : `${actor.name} deactivates ${name}`;
+
+    let description = "";
+    if (action === "activate") {
+        if (cost > 0) description += `<p>Cost: ${cost} ${costResource}</p>`
+        if (effectKey) {
+            const label = labelForEffectKey(effectKey);
+            description += `<p>Effect: ${label} ${effectValue >= 0 ? "+" : ""}${effectValue}</p>`;
+        }
+    }
+
+    const content = await foundry.applications.handlebars.renderTemplate(
+        "systems/of-gods-and-men/templates/chat/effect-card.hbs",
+        { title, description }
+    );
+
+    await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content
+    });
+}
