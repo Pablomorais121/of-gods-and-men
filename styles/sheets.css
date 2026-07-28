@@ -1,90 +1,114 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap");
 
-:root {
-    --ogm-ink: #1a1611;
-    --ogm-parchment: #f4efe4;
-    --ogm-parchment-dark: #e8e0d0;
-    --ogm-border: #2a2419;
-
-    --ogm-font-display: "Cinzel", serif;
-    --ogm-font-body: "EB Garamond", serif;
-
-    --ogm-radius: 4px;
-}
-
-.ogm-sheet {
-    padding: 16px 24px;
-    background: var(--ogm-parchment);
-    color: var(--ogm-ink);
-    font-family: var(--ogm-font-body);
-    font-size: 15px;
-}
-
-.ogm-sheet .window-content {
-    overflow-y: auto;
-    height: 100%;
-}
-
-
-.ogm-sheet .window-content h1{
-    color: var(--ogm-ink);
-    font-family: var(--ogm-font-display);
-    font-weight: 700;
-    font-size: 2.2rem;
-    text-align: center;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin: 0 0 20px 0;
-    border-bottom: 2px double var(--ogm-border);
-    padding-bottom: 12px;
-}
-
-.ogm-sheet fieldset{
-    border: 2px solid var(--ogm-border);
-    border-radius: var(--ogm-radius);
-    padding: 16px;
-    margin: 0 0 16px 0;
-}
-
-.ogm-sheet legend {
-    font-family: var(--ogm-font-display);
-    color: var(--ogm-ink);
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0 12px;
-}
-
-.ogm-sheet legend::before {
-    content: "✦ "; 
-}
-
-.ogm-sheet legend::after {
-    content: " ✦"; 
-}
-
-.ogm-sheet label {
+.ogm-sheet .score-row{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--ogm-ink)
+    margin-bottom: 6px;
 }
 
-.ogm-sheet input[type="number"],
-.ogm-sheet input[type="text"] {
-    font-family: var(--ogm-font-body);
+.ogm-sheet .score-dots{
+    display: flex;
+    gap: 4px;
+}
+.ogm-sheet .score-dot {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--ogm-border);
+    border-radius: 50%;
+    cursor: pointer;
+    background: transparent;
+}
+
+.ogm-sheet .score-dot.filled {
+    background-color: var(--ogm-ink);
+}
+
+.ogm-sheet .score-label {
     color: var(--ogm-ink);
+    font-weight: 600;
+}
+
+.ogm-sheet .tab {
+    padding: 4px 0;
+}
+
+.ogm-sheet .tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 2px solid var(--ogm-border);
+    margin-bottom: 16px;
+}
+
+.ogm-sheet .tabs a {
+    font-family: var(--ogm-font-display);
+    color: #6b5f4a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: var(--ogm-radius) var(--ogm-radius) 0 0;
+}
+
+.ogm-sheet .tabs a:hover{
+    color: var(--ogm-ink);
+}
+
+.ogm-sheet .tabs a.active {
+    color: var(--ogm-ink);
+    font-weight: 700;
+    border-color: var(--ogm-border);
     background: var(--ogm-parchment-dark);
-    border: 1px solid var(--ogm-border);
-    border-radius: var(--ogm-radius);
-    width: 60px;
-    padding: 4px 6px;
+}
+
+.ogm-sheet .resource-cards {
+    display: flex;
+    gap: 12px;
+}
+
+.ogm-sheet .resource-card {
+    flex: 1;
     text-align: center;
 }
 
+.ogm-sheet .resource-name {
+    display: block;
+    font-family: var(--ogm-font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+    margin-bottom: 4px
+}
+
+.ogm-sheet .resource-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.ogm-sheet .resource-numbers input {
+    font-size: 1.4rem;
+    font-weight: 700;
+    width: 45px;
+}
+
+.ogm-sheet .resource-bar{
+    height: 6px;
+    background: var(--ogm-parchment-dark);
+    border: 1px solid var(--ogm-border);
+    border-radius:3px;
+    overflow: hidden;
+}
+
+.ogm-sheet .resource-bar-fill {
+    height: 100%;
+    background: var(--ogm-ink)
+}
 .ogm-sheet .score-row{
     display: flex;
     align-items: center;

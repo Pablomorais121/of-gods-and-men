@@ -20,7 +20,9 @@
   ],
 
   "styles": [
-    "styles/of-gods-and-men.css"
+    "styles/base.css",
+    "styles/sheets.css",
+    "styles/chat.css"
   ],
 
   "languages": [

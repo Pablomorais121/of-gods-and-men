@@ -1,0 +1,88 @@
+.ogm-chat-card {
+  font-family: var(--ogm-font-body);
+  color: var(--ogm-ink);
+  background: var(--ogm-parchment);
+  border: 2px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  padding: 10px;
+}
+
+.ogm-chat-card .roll-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.ogm-chat-card .roll-title {
+  font-family: var(--ogm-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.ogm-chat-card .badge {
+  font-family: var(--ogm-font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--ogm-border);
+}
+
+.ogm-chat-card .badge-attack {
+  background: var(--ogm-parchment-dark);
+}
+
+.ogm-chat-card .badge-crit {
+  background: #8a1f1f;
+  color: var(--ogm-parchment);
+  border-color: #8a1f1f;
+}
+
+.ogm-chat-card .badge-fumble {
+  background: #3a3a3a;
+  color: var(--ogm-parchment);
+  border-color: #3a3a3a;
+}
+
+.ogm-chat-card .attack-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ogm-chat-card .attack-buttons button {
+  font-family: var(--ogm-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+  padding: 6px 14px;
+  background: var(--ogm-parchment-dark);
+  color: var(--ogm-ink);
+  border: 1px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  cursor: pointer;
+}
+
+.ogm-chat-card .attack-buttons button:hover {
+  background: var(--ogm-border);
+  color: var(--ogm-parchment);
+}
+
+.ogm-chat-card .dice-roll {
+  font-family: var(--ogm-font-body);
+  color: var(--ogm-ink);
+}
+
+.ogm-chat-card .dice-total {
+  font-family: var(--ogm-font-display);
+  font-weight: 700;
+  color: var(--ogm-ink);
+  background: var(--ogm-parchment-dark);
+  border: 1px solid var(--ogm-border);
+}
