@@ -29,7 +29,7 @@ export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
     static async #onAddSpell(event, target) {
         const spell = foundry.utils.deepClone(this.item.system.spells);
-        spell.push({name: "", cost: 0, description: ""});
+        spell.push({name: "", cost: 0, description: "", effectKey: "", effectValue: 0});
         await this.item.update({ "system.spells": spell });
     }
 
@@ -46,7 +46,9 @@ export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
             const cost = Number(row.querySelector(".spell-cost").value);
             const name = row.querySelector(".spell-name").value;
             const description = row.querySelector(".spell-description").value;
-            return { cost, name, description };
+            const effectKey = row.querySelector(".spell-effect-key").value;
+            const effectValue = Number(row.querySelector(".spell-effect-value").value);
+            return { cost, name, description, effectKey, effectValue };
         });
         await this.item.update({ "system.spells": spells});
     }

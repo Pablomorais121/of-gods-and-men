@@ -1,0 +1,15 @@
+<div class="tab {{tab.cssClass}}" data-tab="spells" data-group="primary">
+  {{#if god}}
+    {{#each god.system.spells}}
+      <fieldset>
+        <legend>{{this.name}} ({{this.cost}} Sanity)</legend>
+        <p>{{{this.description}}}</p>
+        <button type="button" data-action="toggleSpell" data-index="{{@index}}">
+          {{#if (eq @index ../activeSpellIndex)}}Deactivate{{else}}Cast{{/if}}
+        </button>
+      </fieldset>
+    {{/each}}
+  {{else}}
+    <p>No God chosen yet</p>
+  {{/if}}
+</div>

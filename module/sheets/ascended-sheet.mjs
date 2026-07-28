@@ -75,7 +75,9 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             return { key, value: resource.value, max:resource.max, pct};
         });
 
-                context.blessingIsActive = this.actor.effects.some(e => e.getFlag("of-gods-and-men", "blessingEffect"));
+        context.blessingIsActive = this.actor.effects.some(e => e.getFlag("of-gods-and-men", "blessingEffect"));
+        context.activeSpellEffect = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "spellEffect"));
+        context.activeSpellIndex = activeSpellEffect ? activeSpellEffect.getFlag("of-gods-and-men", "spellEffect") : null;
 
         context.tabs = this._prepareTabs("primary");
 

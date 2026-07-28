@@ -54,6 +54,14 @@
                 <label>Description
                     <textarea class="spell-description">{{this.description}}</textarea>
                 </label>
+
+                <label>Effect Attribute/Skill
+                    <input type="text" class="spell-effect-key" value="{{this.effectKey}}">
+                </label>
+                <label>Effect Value
+                    <input type="number" class="spell-effect-value" value="{{this.effectValue}}">
+                </label>
+                    
                 
                 <button type="button" data-action="deleteSpell" data-index="{{@index}}">X</button>
             </div>
