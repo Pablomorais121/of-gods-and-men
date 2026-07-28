@@ -27,7 +27,8 @@ Hooks.once("init", () => {
     const {Actors, Items} = foundry.documents.collections;
 
     Handlebars.registerHelper("includes", (arr, value) => arr.includes(value));
-    Handlebars.registerHelper ("add", (a, b) => a + b);
+    Handlebars.registerHelper("add", (a, b) => a + b);
+    Handlebars.registerHelper("eq", (a, b) => a === b);
 
     Actors.registerSheet("of-gods-and-men", AscendedSheet, {
         types: ["ascended"],

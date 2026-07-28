@@ -15,7 +15,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             setScore: AscendedSheet.#onSetScore,
             setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks,
             openRoll: AscendedSheet.#onOpenRoll,
-            toggleBlessing: AscendedSheet.#onToggleBlessing
+            toggleBlessing: AscendedSheet.#onToggleBlessing,
+            toggleSpell: AscendedSheet.#onToggleSpell
         }
     };
 
@@ -77,7 +78,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
 
         context.blessingIsActive = this.actor.effects.some(e => e.getFlag("of-gods-and-men", "blessingEffect"));
         context.activeSpellEffect = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "spellEffect"));
-        context.activeSpellIndex = activeSpellEffect ? activeSpellEffect.getFlag("of-gods-and-men", "spellEffect") : null;
+        context.activeSpellIndex = context.activeSpellEffect ? context.activeSpellEffect.getFlag("of-gods-and-men", "spellIndex") : null;
 
         context.tabs = this._prepareTabs("primary");
 
@@ -211,6 +212,47 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             }],
             flags: {
                 "of-gods-and-men": {blessingEffect: true}
+            }
+        }]);
+    }
+
+    static async #onToggleSpell(event, target) {
+        const god = this.actor.items.find(i => i.type === "god");
+        if (!god) return;
+
+        const index = Number(target.dataset.index);
+        const spell = god.system.spells[index];
+
+        const existing = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "spellEffect"));
+
+        if(existing) {
+            const wasThisSpell = existing.getFlag("of-gods-and-men", "spellIndex") === index;
+            await existing.delete();
+            if (wasThisSpell) return;
+        }
+
+        const currentSanity = this.actor.system.resources.sanity.value;
+        if (currentSanity < spell.cost){
+            ui.notifications.warn("Not enough Sanity to cast this Spell");
+            return;
+        }
+
+        if (spell.cost > 0) {
+            await this.actor.update({"system.resources.sanity.value": currentSanity - spell.cost});
+        }
+
+        await this.actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: spell.name || "Spell",
+            img: god.img,
+            origin: god.uuid,
+            changes: [{
+                key: `system.${spell.effectKey}`,
+                mode: 2,
+                value: spell.effectValue,
+                priority: 20
+            }],
+            flags: {
+                "of-gods-and-men": { spellEffect: true, spellIndex: index}
             }
         }]);
     }
