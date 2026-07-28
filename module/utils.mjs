@@ -173,3 +173,72 @@ export  async function performRoll(actor, group, key) {
             flags: messageFlags
         });
     }
+
+export async function resolvePcTies(combat) {
+    const pcCombatants = combat.combatants.filter(c => c.actor?.type === "ascended" && c.initiative !== null);
+
+    const groups = {};
+    for (const c of pcCombatants) {
+        groups[c.initiative] ??= [];
+        groups[c.initiative].push(c);
+    }
+    for (const tied of Object.values(groups)) {
+        if (tied.length < 2) continue;
+        await breakTie(tied);
+    }
+}
+
+async function breakTie(combatants) {
+    let rolls;
+    let allDistinct;
+
+    do {
+        rolls = await Promise.all(combatants.map(() => new Roll("1d12").evaluate()));
+        const values = rolls.map(r => r.total);
+        allDistinct = new Set(values).size === values.length;
+    } while (!allDistinct);
+
+    const updates = combatants.map((c, i) => ({
+        _id: c.id,
+        initiative: c.initiative + rolls[i].total / 100
+    }));
+
+    await combatants[0].combat.updateEmbeddedDocuments("Combatant", updates, { ogmTieBreak: true});
+}
+
+async function onDefendClick(message, button) {
+    const data = message.flags["of-gods-and-men"];
+    if (!data) return;
+
+    const defenseType = button.dataset.defense;
+    const targetActor = game.actors.get(data.targetActorId);
+
+    if(!targetActor) {
+        ui.notifications.error("target actor not found.");
+        return;
+    }
+
+    const defenseAttribute = defenseType === "block" ? "strength" : "reflexes";
+    const defenseValue = targetActor.system.attributes[defenseAttribute];
+
+    const defenseRoll = new Roll(`1d12 + ${defenseValue}`);
+    await defenseRoll.evaluate();
+
+    const success = defenseRoll.total >= data.attackTotal;
+    const damage = success ? 0 : data.attackerStrength + 1;
+
+    let flavor = `<strong>${targetActor.name}</strong> ${defenseType === "block" ? "blocks" : "dodges"}!<br>`;
+    flavor += success ? `<strong>Success!</strong>` : `<strong>Failed!</strong> Takes ${damage} damage.`;
+
+    await defenseRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: targetActor }),
+        flavor
+    });
+
+    if (!success) {
+        const newHealth = Math.max(0, targetActor.system.resources.health.value - damage );
+        await targetActor.update({ "system.resources.health.value": newHealth});
+    }
+
+    button.closest(".attack-buttons").remove();
+}
