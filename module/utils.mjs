@@ -224,6 +224,14 @@ export async function onDefendClick(message, button) {
         content,
         rolls: [defenseRoll]
     });
+
+    if (!success) {
+        const newHealth = Math.max(0, targetActor.system.resources.health.value - damage);
+        await targetActor.update({ "system.resources.health.value": newHealth });
+    }
+
+    button.closest(".attack-buttons").remove();
+
 }
 
 export async function resolvePcTies(combat) {
