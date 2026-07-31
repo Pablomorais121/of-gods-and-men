@@ -236,3 +236,29 @@
     padding: 3px 4px;
     font-size: 0.7rem;
 }
+
+.ogm-sheet .stat-cards {
+  display: flex;
+  gap: 12px;
+}
+
+.ogm-sheet .stat-card {
+  flex: 1;
+  text-align: center;
+  border: 1px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  padding: 8px;
+}
+
+.ogm-sheet .stat-single-input {
+  font-size: 1.4rem;
+  font-weight: 700;
+  width: 55px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.ogm-sheet .score-dots-center {
+  justify-content: center;
+  margin-top: 6px;
+}

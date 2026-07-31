@@ -81,27 +81,38 @@
 
     <fieldset>
         <legend>Other</legend>
+        <div class="stat-cards">
+            <div class="stat-card">
+                <span class="resource-name">Experience</span>
+                <div class="xp-numbers">
+                    <div class="xp-field">
+                        <label>Current</label>
+                        <input type="number" name="system.experience.current" value="{{system.experience.current}}" min="0">
+                    </div>
+                    <div class="xp-field">
+                        <label>Total</label>
+                        <input type="number" name="system.experience.total" value="{{system.experience.total}}" min="0">
+                    </div>
+                </div>
+            </div>
 
-        <label>XP
-            <input type="number" name="system.experience" value="{{system.experience}}" min="0">
-        </label>
+            <div class="stat-card">
+                <span class="resource-name">Divine Help</span>
+                <input type="number" name="system.divineHelpPoints" value="{{system.divineHelpPoints}}" min="0" class="stat-single-input">
+            </div>
 
-        <label>Divine Help Points
-            <input type="number" name="system.divineHelpPoints" value="{{system.divineHelpPoints}}" min="0">
-        </label>
-
-        <div class="score-row">
-            <span class="score-label">Dogma Breaks</span>
-            <div class="score-dots">
-                {{#each dogmaDots}}
-                    <span
-                        class="score-dot {{#if this}}filled{{/if}}"
-                        data-action="setDogmaBreaks"
-                        data-value="{{add @index 1}}"
-                    ></span>
-                {{/each}}
+            <div class="stat-card">
+                <span class="resource-name">Dogma Breaks</span>
+                <div class="score-dots score-dots-center">
+                    {{#each dogmaDots}}
+                        <span
+                            class="score-dot {{#if this}}filled{{/if}}"
+                            data-action="setDogmaBreaks"
+                            data-value="{{add @index 1}}"
+                        ></span>
+                    {{/each}}
+                </div>
             </div>
         </div>
-
     </fieldset>
 </div>

@@ -53,11 +53,9 @@ export default class AscendedData extends foundry.abstract.TypeDataModel {
             sanity: resourceField()
         });
 
-        schema.experience = new NumberField({
-            required: true,
-            integer: true,
-            min: 0,
-            initial: 0
+        schema.experience = new SchemaField({
+            total: new NumberField({required: true, integer: true, min: 0, initial: 0}),
+            current: new NumberField({required: true, integer: true, min: 0, initial: 0   })
         });
 
         schema.divineHelpPoints = new NumberField({
