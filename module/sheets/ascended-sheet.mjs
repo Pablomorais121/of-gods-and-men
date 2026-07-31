@@ -1,5 +1,5 @@
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
-import { buildScoreRows, performRoll, postEffectMessage } from "../utils.mjs";
+import { buildEffectChanges, buildScoreRows, performRoll, postEffectMessage } from "../utils.mjs";
 
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -206,12 +206,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             name: god.system.blessing.name || "Blessing",
             img: god.img,
             origin: god.uuid,
-            changes: [{
-                key: `system.${god.system.blessing.effectKey}`,
-                mode: 2, //ADD
-                value: god.system.blessing.effectValue,
-                priority: 20
-            }],
+            changes: buildEffectChanges(god.system.blessing.effectType, god.system.blessing.effectKey, god.system.blessing.effectValue),
             flags: {
                 "of-gods-and-men": {blessingEffect: true}
             }
@@ -259,12 +254,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             name: spell.name || "Spell",
             img: god.img,
             origin: god.uuid,
-            changes: [{
-                key: `system.${spell.effectKey}`,
-                mode: 2,
-                value: spell.effectValue,
-                priority: 20
-            }],
+             changes: buildEffectChanges(system.spell.effectType, system.spell.effectKey, system.spell.effectValue),
             flags: {
                 "of-gods-and-men": { spellEffect: true, spellIndex: index}
             }

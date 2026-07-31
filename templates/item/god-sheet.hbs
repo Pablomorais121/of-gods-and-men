@@ -19,13 +19,32 @@
         <label>Description
             <textarea name="system.blessing.description">{{system.blessing.description}}</textarea>
         </label>
-        <label>Effect Attribute/Skill (e.g. attributes.strength)
-            <input type="text" name="system.blessing.effectKey" value="{{system.blessing.effectKey}}">
+        <label>Effect Type
+            <select name="system.blessing.effectType">
+                <option value="none" {{#if (eq system.blessing.effectType "none")}}selected{{/if}}>None (narrative)</option>
+                <option value="single" {{#if (eq system.blessing.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
+                <option value="allSkills" {{#if (eq system.blessing.effectType "allSkills")}}selected{{/if}}>All Skills</option>
+                <option value="allAttributes" {{#if (eq system.blessing.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
+            </select>
         </label>
-        <label>Effect Value
+        <label>Which (only for "Single")
+            <select name="system.blessing.effectKey">
+                <option value="">—</option>
+                <optgroup label="Attributes">
+                    {{#each attributeOptions}}
+                        <option value="attributes.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </optgroup>
+                <optgroup label="Skills">
+                    {{#each skillOptions}}
+                        <option value="skills.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </optgroup>
+            </select>
+        </label>
+        <label>Value
             <input type="number" name="system.blessing.effectValue" value="{{system.blessing.effectValue}}">
         </label>
-
     </fieldset>
 
     <fieldset>
@@ -55,14 +74,32 @@
                     <textarea class="spell-description">{{this.description}}</textarea>
                 </label>
 
-                <label>Effect Attribute/Skill
-                    <input type="text" class="spell-effect-key" value="{{this.effectKey}}">
+                <label>Effect Type
+                    <select class="spell-effect-type">
+                        <option value="none" {{#if (eq this.effectType "none")}}selected{{/if}}>None</option>
+                        <option value="single" {{#if (eq this.effectType "single")}}selected{{/if}}>Single</option>
+                        <option value="allSkills" {{#if (eq this.effectType "allSkills")}}selected{{/if}}>All Skills</option>
+                        <option value="allAttributes" {{#if (eq this.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
+                    </select>
                 </label>
-                <label>Effect Value
+                <label>Which
+                    <select class="spell-effect-key">
+                        <option value="">—</option>
+                        <optgroup label="Attributes">
+                            {{#each ../attributeOptions}}
+                                <option value="attributes.{{this.key}}" {{#if (eq ../this.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                            {{/each}}
+                        </optgroup>
+                        <optgroup label="Skills">
+                            {{#each ../skillOptions}}
+                                <option value="skills.{{this.key}}" {{#if (eq ../this.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                            {{/each}}
+                        </optgroup>
+                    </select>
+                </label>
+                <label>Value
                     <input type="number" class="spell-effect-value" value="{{this.effectValue}}">
                 </label>
-                    
-                
                 <button type="button" data-action="deleteSpell" data-index="{{@index}}">X</button>
             </div>
         {{/each}}

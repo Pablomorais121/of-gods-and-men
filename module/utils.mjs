@@ -271,3 +271,20 @@ export async function postEffectMessage(actor, { action, name, cost, costResourc
         content
     });
 }
+
+export function buildEffectChanges(effectType, effectKey, effectValue) {
+    if (effectType === "single" && effectKey) {
+        return [{ key: `system.${effectKey}`, mode: 2, value: effectValue, priority: 20 }];
+    }
+    if (effectType === "allSkills") {
+        return Object.keys(SKILL_LABELS).map(key => ({
+            key: `system.skills.${key}`, mode: 2, value: effectValue, priority: 20
+        }));
+    }
+    if (effectType === "allAttributes") {
+        return Object.keys(ATTRIBUTE_LABELS).map(key => ({
+            key: `system.attributes.${key}`, mode: 2, value: effectValue, priority: 20
+        }));
+    }
+    return [];
+}

@@ -10,6 +10,7 @@ export default class GodData extends foundry.abstract.TypeDataModel {
             name: new StringField({required: true, blank: true}),
             cost: new NumberField({required: true, integer: true, min: 0, initial: 0}),
             description: new HTMLField(),
+            effectType: new StringField({ required: true, initial: "none", choices:["none", "single", "allSkills", "allAttributes"]}),
             effectKey: new StringField( { required: true, blank: true}),
             effectValue: new NumberField({required: true, integer: true, initial: 0})
         });
@@ -24,6 +25,7 @@ export default class GodData extends foundry.abstract.TypeDataModel {
                 name: new StringField({required: true, blank: true}),
                 cost: new NumberField({required: true, integer:true, min:0, initial: 0}),
                 description: new HTMLField(),
+                effectType: new StringField({ required: true, initial: "none", choices:["none", "single", "allSkills", "allAttributes"]}),
                 effectKey: new StringField({ required: true, blank: true}),
                 effectValue: new NumberField({required: true, integer: true, initial: 0})
             }),
