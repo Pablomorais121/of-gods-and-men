@@ -12,7 +12,7 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
         actions: {
             addPriority: ArchetypeSheet.#onAddPriority,
             deletePriority: ArchetypeSheet.#onDeletePriority,
-            savePriority: ArchetypeSheet.#onSavePriority
+            setPriorityPoints: ArchetypeSheet.#onSetPriorityPoints
         }
     };
 
@@ -27,8 +27,13 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
         context.item = this.item;
         context.system = this.item.system;
 
-        context.skillChoices = Object.entries(SKILL_LABELS).map(([key, label]) => ({key, label}));
-
+        context.priorityRows = this.item.system.priorities.map((p, index) => ({
+            index,
+            options: p.options,
+            dots: [1, 2, 3].map(n => n <= p.points)
+        }));
+        context.skillChoices = Object.entries(SKILL_LABELS).map(([key, label]) => ({ key, label }));
+        
         return context;
     }
 
@@ -45,14 +50,34 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
         await this.item.update({ "system.priorities": priorities});
     }
 
-    static async #onSavePriority(event, target) {
-        const rows = this.element.querySelectorAll(".priority-row");
-        const priorities = Array.from(rows).map(row =>{
-            const points = Number(row.querySelector(".priority-points").value);
-            const optionText = row.querySelector(".priority-options").value;
-            const options = Array.from(row.querySelector(".priority-options").selectedOptions).map(o => o.value);
-            return { points, options };
-        });
+    static async #onSetPriorityPoints(event, target) {
+        const index = Number(target.dataset.index);
+        const clickedValue = Number(target.dataset.value);
+
+        const priorities = foundry.utils.deepClone(this.item.system.priorities);
+        const currentValue = priorities[index].points;
+        priorities[index].points = clickedValue === currentValue ? clickedValue - 1: clickedValue
         await this.item.update({ "system.priorities": priorities});
     }
+
+    _onRender(context, options) {
+        super._onRender(context, options);
+
+        this.element.querySelectorAll(".priority-skills").forEach(container => {
+            container.querySelectorAll('input[type="checkbox]').forEach(checkbox => {
+                checkbox.addEventListener("change", () => this.#saveOptionsForRow(container));
+            })
+        });
+    }
+    
+    async #saveOptionsForRow(container) {
+        const index = Number(select.dataset.index);
+        const checked = Array.from(container.querySelectorAll('input[type="checkbox]:checked')).map(cb => cb.value);
+
+        const priorities = foundry.utils.deepClone(this.item.system.priorities);
+        priorities[index].options = checked;
+
+        await this.item.update({ "system.priorities" : priorities});
+    }
+
 }

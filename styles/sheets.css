@@ -10,6 +10,7 @@
     display: flex;
     gap: 4px;
 }
+
 .ogm-sheet .score-dot {
     width: 18px;
     height: 18px;
@@ -109,6 +110,7 @@
     height: 100%;
     background: var(--ogm-ink)
 }
+
 .ogm-sheet .score-row{
     display: flex;
     align-items: center;
@@ -120,6 +122,7 @@
     display: flex;
     gap: 4px;
 }
+
 .ogm-sheet .score-dot {
     width: 18px;
     height: 18px;
@@ -218,4 +221,18 @@
 .ogm-sheet .resource-bar-fill {
     height: 100%;
     background: var(--ogm-ink)
+}
+
+.ogm-sheet .priority-skills {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin: 6px 0;
+}
+
+.ogm-sheet .ogm-toggle-sm {
+    flex: none;
+    text-align: right;
+    padding: 3px 4px;
+    font-size: 0.7rem;
 }

@@ -8,26 +8,32 @@
 
     <fieldset>
         <legend>Priorities</legend>
-        {{#each system.priorities}}
+        {{#each priorityRows}}
             <div class="priority-row">
-                <label>Points
-                    <Input types="bumber" class="priority-points" data-index="{{@index}}" value="{{this.points}}" min="1">
-                </label>
+                <div class="score-dots">
+                    {{#each this.dots}}
+                        <span
+                        class="score-dot {{#if this}}filled{{/if}}"
+                        data-action="setPriorityPoints"
+                        data-index="{{../index}}"
+                        data-value="{{add @index 1}}"
+                        ></span>
+                    {{/each}}
+                </div>
 
-                <label> Options 
-                    <select class="priority-options" data-index="{{@index}}" multiple>
-                        {{#each ../skillChoices}}
-                        <option value="{{this.key}}" {{#if (includes ../this.options this.key)}}selected{{/if}}>{{this.label}}</option>
-                        {{/each}}
-                    </select>
-                </label>
+                <div class="priority-skills" data-index="{{this.index}}">
+                    {{#each ../skillChoices}}
+                        <label class="ogm-toggle ogm-toggle-sm">
+                        <input type="checkbox" value="{{this.key}}" {{#if (includes ../this.options this.key)}}checked{{/if}}>
+                        <span>{{this.label}}</span>
+                        </label>
+                    {{/each}}
+                </div>
                 
-                <button type="button" data-action="deletePriority" data-index="{{@index}}">X</button>
+                <button type="button" data-action="deletePriority" data-index="{{this.index}}">✕</button>
             </div>
         {{/each}}
-
         <button type="button" data-action="addPriority">+ Add Priority</button>
-        <button type="button" data-action="savePriority">Save Priority</button>
     </fieldset>
 
 </div>

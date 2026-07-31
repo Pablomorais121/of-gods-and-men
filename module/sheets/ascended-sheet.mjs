@@ -124,6 +124,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         
         const chosen = await foundry.applications.api.DialogV2.prompt({
             window: {title: `${archetypeItem.name} - Choose Skills`},
+            classes: ["ogm-roll-dialog"],
             content: `<form>${rows}</form>`,
             ok: {
                 label: "Confirm",
