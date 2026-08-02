@@ -17,7 +17,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             openRoll: AscendedSheet.#onOpenRoll,
             toggleBlessing: AscendedSheet.#onToggleBlessing,
             toggleSpell: AscendedSheet.#onToggleSpell,
-            toggleEquip: AscendedSheet.#onToggleEquip
+            toggleEquip: AscendedSheet.#onToggleEquip,
+            deleteObject: AscendedSheet.#onDeleteObject
         }
     };
 
@@ -85,7 +86,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         .filter(i => i.type === "object")
         .map(item => ({
             item,
-            isEquipped: this.actor.effects.some(e => e.getFlag("of-gods-and-men", "ObjectItemId") === item.id)
+            isEquipped: this.actor.effects.some(e => e.getFlag("of-gods-and-men", "objectItemId") === item.id)
         }));
 
         context.tabs = this._prepareTabs("primary");
@@ -262,7 +263,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             name: spell.name || "Spell",
             img: god.img,
             origin: god.uuid,
-             changes: buildEffectChanges(system.spell.effectType, system.spell.effectKey, system.spell.effectValue),
+             changes: buildEffectChanges(spell.effectType, spell.effectKey, spell.effectValue),
             flags: {
                 "of-gods-and-men": { spellEffect: true, spellIndex: index}
             }
