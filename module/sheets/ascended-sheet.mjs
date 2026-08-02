@@ -16,7 +16,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             setDogmaBreaks: AscendedSheet.#onSetDogmaBreaks,
             openRoll: AscendedSheet.#onOpenRoll,
             toggleBlessing: AscendedSheet.#onToggleBlessing,
-            toggleSpell: AscendedSheet.#onToggleSpell
+            toggleSpell: AscendedSheet.#onToggleSpell,
+            toggleEquip: AscendedSheet.#onToggleEquip
         }
     };
 
@@ -79,6 +80,13 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         context.blessingIsActive = this.actor.effects.some(e => e.getFlag("of-gods-and-men", "blessingEffect"));
         context.activeSpellEffect = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "spellEffect"));
         context.activeSpellIndex = context.activeSpellEffect ? context.activeSpellEffect.getFlag("of-gods-and-men", "spellIndex") : null;
+
+        context.inventoryItems = this.actor.items
+        .filter(i => i.type === "object")
+        .map(item => ({
+            item,
+            isEquipped: this.actor.effects.some(e => e.getFlag("of-gods-and-men", "ObjectItemId") === item.id)
+        }));
 
         context.tabs = this._prepareTabs("primary");
 
@@ -270,6 +278,48 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
                 effectKey: spell.effectKey,
                 effectValue: spell.effectValue
             });
+    }
+
+    static async #onToggleEquip(event, target) {
+        const itemId = target.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        const existing = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "objectItemId") === itemId);
+
+        if (existing) {
+            await existing.delete();
+            await postEffectMessage(this.actor, { action: "deactivate", name: item.name });
+            return;
+        }
+
+        await this.actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: item.name,
+            img: item.img,
+            origin: item.uuid,
+            changes: buildEffectChanges(item.system.effectType, item.system.effectKey, item.system.effectValue),
+            flags: {
+            "of-gods-and-men": { objectItemId: itemId }
+            }
+        }]);
+
+        await postEffectMessage(this.actor, {
+            action: "activate",
+            name: item.name,
+            cost: 0,
+            costResource: "",
+            effectKey: item.system.effectKey,
+            effectValue: item.system.effectValue
+        });
+    }
+
+    static async #onDeleteObject(event, target) {
+    const itemId = target.dataset.itemId;
+    const existing = this.actor.effects.find(e => e.getFlag("of-gods-and-men", "objectItemId") === itemId);
+    if (existing) await existing.delete();
+
+    const item = this.actor.items.get(itemId);
+    if (item) await item.delete();
     }
 
     get title(){

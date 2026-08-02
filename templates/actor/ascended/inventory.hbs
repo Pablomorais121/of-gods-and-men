@@ -1,4 +1,13 @@
-<!-- inventory.hbs -->
 <div class="tab {{tab.cssClass}}" data-tab="inventory" data-group="primary">
-    <p>Coming soon.</p>
+    {{#each inventoryItems}}
+        <fieldset>
+            <legend>{{this.item.name}}</legend>
+            <p>{{{this.item.system.description}}}</p>
+            <button type="button" data-action="toggleEquip" data-item-id="{{this.item.id}}">
+                {{#if this.isEquipped}}Unequip{{else}}Equip{{/if}}
+            </button>
+            <button type="button" data-action="deleteObject" data-item-id="{{this.item.id}}">Remove</button>
+        </fieldset>
+    {{/each}}
+    {{#unless inventoryItems.length}}<p>Drag items here to add them to your inventory.</p>{{/unless}}
 </div>

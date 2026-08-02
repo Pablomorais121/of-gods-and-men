@@ -2,13 +2,13 @@ import AscendedData from "./data/actor-ascended.mjs";
 import GodData from "./data/item-god.mjs";
 import ArchetypeData from "./data/item-archetype.mjs";
 import NPCData from "./data/actor-npc.mjs";
-
+import ObjectData from "./data/item-object.mjs";
 
 import AscendedSheet from "./sheets/ascended-sheet.mjs";
 import GodSheet from "./sheets/god-sheet.mjs";
 import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
 import NPCSheet from "./sheets/npc-sheet.mjs";
-import ObjectData from "./data/item-object.mjs";
+import ObjectSheet from "./sheets/object-sheet.mjs";
 
 import { resolvePcTies, onDefendClick } from "./utils.mjs";
 
