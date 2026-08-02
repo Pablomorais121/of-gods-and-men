@@ -40,7 +40,8 @@
     },
     "Item": {
         "god": {},
-        "archetype": {}
+        "archetype": {},
+        "object": {}
     }
   },
 

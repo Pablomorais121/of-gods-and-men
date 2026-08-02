@@ -8,6 +8,7 @@ import AscendedSheet from "./sheets/ascended-sheet.mjs";
 import GodSheet from "./sheets/god-sheet.mjs";
 import ArchetypeSheet from "./sheets/archetype-sheet.mjs";
 import NPCSheet from "./sheets/npc-sheet.mjs";
+import ObjectData from "./data/item-object.mjs";
 
 import { resolvePcTies, onDefendClick } from "./utils.mjs";
 
@@ -19,6 +20,7 @@ Hooks.once("init", () => {
 
     CONFIG.Item.dataModels.god = GodData;
     CONFIG.Item.dataModels.archetype = ArchetypeData;
+    CONFIG.Item.dataModels.object = ObjectData;
 
     CONFIG.Combat.initiative = {
         formula: "@attributes.reflexes * 100 + @npcBonus",
@@ -53,6 +55,12 @@ Hooks.once("init", () => {
         types: ["archetype"],
         makeDefault: true,
         label: "Archetype Sheet"
+    });
+
+    Items.registerSheet("of-gods-and-men", ObjectSheet, {
+        types: ["object"],
+        makeDefault: true,
+        label: "Object Sheet"
     });
 
 }); 

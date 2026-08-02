@@ -6,7 +6,8 @@
     },
     "Item": {
       "god": "God",
-      "archetype": "Archetype"
+      "archetype": "Archetype",
+      "object": "Object"
     }
   }
 }
