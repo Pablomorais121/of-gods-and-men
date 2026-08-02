@@ -18,7 +18,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             toggleBlessing: AscendedSheet.#onToggleBlessing,
             toggleSpell: AscendedSheet.#onToggleSpell,
             toggleEquip: AscendedSheet.#onToggleEquip,
-            deleteObject: AscendedSheet.#onDeleteObject
+            deleteObject: AscendedSheet.#onDeleteObject,
+            adjustQuantity: AscendedSheet.#onAdjustQuantity
         }
     };
 
@@ -41,23 +42,6 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             initial: "attributes"
         }
     };
-
-    async _onDropItem(event, item){
-        if (item.type === "god" || item.type === "archetype") {
-            const existing = this.actor.items.find(i => i.type === item.type);
-            if (existing) {
-                await existing.delete();
-            }
-        }
-
-        const created = await super._onDropItem(event, item);
-
-        if (item.type === "archetype" && created){
-            await this._promoptArchtypeChoices(created);
-        }
-        
-        return created;
-    }
 
     async _prepareContext(options) {
         const context = await super._prepareContext(options);
@@ -92,6 +76,38 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         context.tabs = this._prepareTabs("primary");
 
         return context;
+    }
+
+    async _onDropItem(event, item){
+        if (item.type === "god" || item.type === "archetype") {
+            const existing = this.actor.items.find(i => i.type === item.type);
+            if (existing) {
+                await existing.delete();
+            }
+        }
+
+        if (item.type === "object") {
+            const existing = this.actor.items.find(i =>
+                i.type === "object" && i.getFlag("of-gods-and-men", "sourceItemId") === item.uuid
+            );
+            if (existing) {
+                await existing.update({ "system.quantity": existing.system.quantity + 1 });
+                return existing;
+            }
+        }
+  
+
+        const created = await super._onDropItem(event, item);
+
+        if (item.type === "object" && created) {
+            await created.setFlag("of-gods-and-men", "sourceItemId", item.uuid);
+        }
+
+        if (item.type === "archetype" && created) {
+            await this._promoptArchtypeChoices(created);
+        }
+        
+        return created;
     }
 
     _prepareTabs(group) {
@@ -321,6 +337,16 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
 
     const item = this.actor.items.get(itemId);
     if (item) await item.delete();
+    }
+
+    static async #onAdjustQuantity(event, target) {
+        const itemId = target.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (!item || item.type !== "object") return;
+        
+        const delta = Number(target.dataset.delta);
+        const newQuantity = Math.max(1, item.system.quantity + delta);
+        await item.update({"system.quantity": newQuantity});
     }
 
     get title(){

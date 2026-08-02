@@ -6,6 +6,7 @@ export default class ObjectData extends foundry.abstract.TypeDataModel {
         const schema ={};
 
         schema.description = new HTMLField();
+        schema.quantity = new NumberField({ required: true, integer: true, min: 1, initial: 1 });
         schema.hasEffect = new BooleanField({ required: true, initial: false });
 
         schema.effectType = new StringField({ required: true, initial: "none", choices:["none", "single", "allSkills", "allAttributes"]});
