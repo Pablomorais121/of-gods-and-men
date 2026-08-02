@@ -64,15 +64,15 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
         super._onRender(context, options);
 
         this.element.querySelectorAll(".priority-skills").forEach(container => {
-            container.querySelectorAll('input[type="checkbox]').forEach(checkbox => {
+            container.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.addEventListener("change", () => this.#saveOptionsForRow(container));
             })
         });
     }
     
     async #saveOptionsForRow(container) {
-        const index = Number(select.dataset.index);
-        const checked = Array.from(container.querySelectorAll('input[type="checkbox]:checked')).map(cb => cb.value);
+        const index = Number(container.dataset.index);
+        const checked = Array.from(container.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
 
         const priorities = foundry.utils.deepClone(this.item.system.priorities);
         priorities[index].options = checked;
