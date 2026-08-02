@@ -11,7 +11,7 @@
 
     <div class="effect-fields" {{#unless system.hasEffect}}style="display: none;"{{/unless}}>
         <label>Effect Type
-            <select name="system.object.effectType">
+            <select name="system.effectType">
                 <option value="none" {{#if (eq system.effectType "none")}}selected{{/if}}>None (narrative)</option>
                 <option value="single" {{#if (eq system.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
                 <option value="allSkills" {{#if (eq system.effectType "allSkills")}}selected{{/if}}>All Skills</option>
@@ -19,7 +19,7 @@
             </select>
         </label>
         <label>Which (only for "Single")
-            <select name="system.object.effectKey">
+            <select name="system.effectKey">
                 <option value="">—</option>
                 <optgroup label="Attributes">
                     {{#each attributeOptions}}
@@ -34,7 +34,7 @@
             </select>
         </label>
         <label>Value
-            <input type="number" name="system.object.effectValue" value="{{system.object.effectValue}}">
+            <input type="number" name="system.effectValue" value="{{system.effectValue}}">
         </label>
     </div>
 </fieldset>
