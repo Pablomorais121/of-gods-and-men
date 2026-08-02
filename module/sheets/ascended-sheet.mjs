@@ -19,7 +19,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             toggleSpell: AscendedSheet.#onToggleSpell,
             toggleEquip: AscendedSheet.#onToggleEquip,
             deleteObject: AscendedSheet.#onDeleteObject,
-            adjustQuantity: AscendedSheet.#onAdjustQuantity
+            adjustQuantity: AscendedSheet.#onAdjustQuantity,
+            openItem: AscendedSheet.#onOpenItem
         }
     };
 
@@ -349,6 +350,11 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
         await item.update({"system.quantity": newQuantity});
     }
 
+    static async #onOpenItem(event, target) {
+        const item = this.actor.items.get(target.dataset.itemId);
+        if (item) item.sheet.render(true);
+    }
+    
     get title(){
         return this.actor.name;
     }

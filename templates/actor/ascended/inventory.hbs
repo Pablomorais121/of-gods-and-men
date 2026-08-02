@@ -1,17 +1,34 @@
 <div class="tab {{tab.cssClass}}" data-tab="inventory" data-group="primary">
-    {{#each inventoryItems}}
-        <fieldset>
-            <legend>{{this.item.name}} x {{this.item.system.quantity}}</legend>
-            <p>{{{this.item.system.description}}}</p>
-            {{#if this.item.system.hasEffect}}
-                <button type="button" data-action="toggleEquip" data-item-id="{{this.item.id}}">
-                    {{#if this.isEquipped}}Unequip{{else}}Equip{{/if}}
-                </button>
-            {{/if}}
-            <button type="button" data-action="deleteObject" data-item-id="{{this.item.id}}">Remove</button>
-            <button type="button" data-action="adjustQuantity" data-item-id="{{this.item.id}}" data-delta="-1">-</button>
-            <button type="button" data-action="adjustQuantity" data-item-id="{{this.item.id}}" data-delta="1">+</button>
-        </fieldset>
-    {{/each}}
-    {{#unless inventoryItems.length}}<p>Drag items here to add them to your inventory.</p>{{/unless}}
+  <div class="item-list-header">
+    <span class="col-img"></span>
+    <span class="col-name">Name</span>
+    <span class="col-qty">Qty</span>
+    <span class="col-actions">Actions</span>
+  </div>
+
+  {{#each inventoryItems}}
+    <div class="item-row">
+      <img class="item-img" src="{{this.item.img}}" data-action="openItem" data-item-id="{{this.item.id}}" alt="{{this.item.name}}">
+      <span class="item-name" data-action="openItem" data-item-id="{{this.item.id}}">{{this.item.name}}</span>
+
+      <div class="item-qty">
+        <button type="button" data-action="adjustQuantity" data-item-id="{{this.item.id}}" data-delta="-1"><i class="fas fa-minus"></i></button>
+        <span>{{this.item.system.quantity}}</span>
+        <button type="button" data-action="adjustQuantity" data-item-id="{{this.item.id}}" data-delta="1"><i class="fas fa-plus"></i></button>
+      </div>
+
+      <div class="item-actions">
+        {{#if this.item.system.hasEffect}}
+          <button type="button" class="icon-btn {{#if this.isEquipped}}active{{/if}}" data-action="toggleEquip" data-item-id="{{this.item.id}}" title="{{#if this.isEquipped}}Unequip{{else}}Equip{{/if}}">
+            <i class="fas fa-shield-halved"></i>
+          </button>
+        {{/if}}
+        <button type="button" class="icon-btn" data-action="deleteObject" data-item-id="{{this.item.id}}" title="Remove">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  {{/each}}
+
+  {{#unless inventoryItems.length}}<p>Drag items here to add them to your inventory.</p>{{/unless}}
 </div>
