@@ -5,30 +5,36 @@
             <textarea name="system.object.description">{{system.description}}</textarea>
     </label>
 
-    <label>Effect Type
-        <select name="system.object.effectType">
-            <option value="none" {{#if (eq system.effectType "none")}}selected{{/if}}>None (narrative)</option>
-            <option value="single" {{#if (eq system.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
-            <option value="allSkills" {{#if (eq system.effectType "allSkills")}}selected{{/if}}>All Skills</option>
-            <option value="allAttributes" {{#if (eq system.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
-        </select>
+    <label>Has Effect
+        <input type="checkbox" name="system.hasEffect" {{#if system.hasEffect}}checked{{/if}}>
     </label>
-    <label>Which (only for "Single")
-        <select name="system.object.effectKey">
-            <option value="">—</option>
-            <optgroup label="Attributes">
-                {{#each attributeOptions}}
-                    <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
-                {{/each}}
-            </optgroup>
-            <optgroup label="Skills">
-                {{#each skillOptions}}
-                    <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
-                {{/each}}
-            </optgroup>
-        </select>
-    </label>
-    <label>Value
-        <input type="number" name="system.object.effectValue" value="{{system.object.effectValue}}">
-    </label>
+
+    <div class="effect-fields" {{#unless system.hasEffect}}style="display: none;"{{/unless}}>
+        <label>Effect Type
+            <select name="system.object.effectType">
+                <option value="none" {{#if (eq system.effectType "none")}}selected{{/if}}>None (narrative)</option>
+                <option value="single" {{#if (eq system.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
+                <option value="allSkills" {{#if (eq system.effectType "allSkills")}}selected{{/if}}>All Skills</option>
+                <option value="allAttributes" {{#if (eq system.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
+            </select>
+        </label>
+        <label>Which (only for "Single")
+            <select name="system.object.effectKey">
+                <option value="">—</option>
+                <optgroup label="Attributes">
+                    {{#each attributeOptions}}
+                        <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </optgroup>
+                <optgroup label="Skills">
+                    {{#each skillOptions}}
+                        <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                    {{/each}}
+                </optgroup>
+            </select>
+        </label>
+        <label>Value
+            <input type="number" name="system.object.effectValue" value="{{system.object.effectValue}}">
+        </label>
+    </div>
 </fieldset>

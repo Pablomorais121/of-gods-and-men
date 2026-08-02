@@ -272,7 +272,9 @@ export async function postEffectMessage(actor, { action, name, cost, costResourc
     });
 }
 
-export function buildEffectChanges(effectType, effectKey, effectValue) {
+export function buildEffectChanges(effectType, effectKey, effectValue, hasEffect = true) {
+    if( !hasEffect) return [];
+
     if (effectType === "single" && effectKey) {
         return [{ key: `system.${effectKey}`, mode: 2, value: effectValue, priority: 20 }];
     }

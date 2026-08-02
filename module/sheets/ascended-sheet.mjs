@@ -298,7 +298,7 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             name: item.name,
             img: item.img,
             origin: item.uuid,
-            changes: buildEffectChanges(item.system.effectType, item.system.effectKey, item.system.effectValue),
+            changes: buildEffectChanges(item.system.effectType, item.system.effectKey, item.system.effectValue, item.system.hasEffect),
             flags: {
             "of-gods-and-men": { objectItemId: itemId }
             }
