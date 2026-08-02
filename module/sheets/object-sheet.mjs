@@ -1,14 +1,17 @@
+import { PlayEditMixin } from "../sheet-mixins.mjs";
+
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
 
-export default class ObjectSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+export default class ObjectSheet extends PlayEditMixin(HandlebarsApplicationMixin(ItemSheetV2)) {
     
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "item", "object", "ogm-sheet"],
         position: { width: 500, height: 600 },
         form: { submitOnChange: true },
         actions: {
+            toggleMode: ObjectSheet._onToggleMode,
         }
     };
 

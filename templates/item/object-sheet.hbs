@@ -1,40 +1,69 @@
 <fieldset>
-    <legend>{{item.name}}</legend>
+    <div class="mode-toggle-row">
+        <legend>{{item.name}}</legend>
+        {{#if canEdit}}
+            <button type="button" class="icon-btn" data-action="toggleMode" title="Toggle Edit Mode">
+                <i class="fas {{#if editable}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+            </button>
+        {{/if}}
+    </div>
 
     <label>Description
-            <textarea name="system.object.description">{{system.description}}</textarea>
+        {{#if editable}}
+            <textarea name="system.description">{{system.description}}</textarea>
+        {{else}}
+            <div class="readonly-text">{{{system.description}}}</div>
+        {{/if}}
     </label>
 
     <label>Has Effect
-        <input type="checkbox" name="system.hasEffect" {{#if system.hasEffect}}checked{{/if}}>
+        {{#if editable}}
+            <input type="checkbox" name="system.hasEffect" {{#if system.hasEffect}}checked{{/if}}>
+        {{else}}
+            <span>{{#if system.hasEffect}}Yes{{else}}No{{/if}}</span>
+        {{/if}}
     </label>
 
-    <div class="effect-fields" {{#unless system.hasEffect}}style="display: none;"{{/unless}}>
-        <label>Effect Type
-            <select name="system.effectType">
-                <option value="none" {{#if (eq system.effectType "none")}}selected{{/if}}>None (narrative)</option>
-                <option value="single" {{#if (eq system.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
-                <option value="allSkills" {{#if (eq system.effectType "allSkills")}}selected{{/if}}>All Skills</option>
-                <option value="allAttributes" {{#if (eq system.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
-            </select>
-        </label>
-        <label>Which (only for "Single")
-            <select name="system.effectKey">
-                <option value="">—</option>
-                <optgroup label="Attributes">
-                    {{#each attributeOptions}}
-                        <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
-                    {{/each}}
-                </optgroup>
-                <optgroup label="Skills">
-                    {{#each skillOptions}}
-                        <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
-                    {{/each}}
-                </optgroup>
-            </select>
-        </label>
-        <label>Value
-            <input type="number" name="system.effectValue" value="{{system.effectValue}}">
-        </label>
-    </div>
+    {{#if system.hasEffect}}
+        <div class="effect-fields">
+            <label>Effect Type
+                {{#if editable}}
+                    <select name="system.effectType">
+                    <option value="none" {{#if (eq system.effectType "none")}}selected{{/if}}>None (narrative)</option>
+                    <option value="single" {{#if (eq system.effectType "single")}}selected{{/if}}>Single Attribute/Skill</option>
+                    <option value="allSkills" {{#if (eq system.effectType "allSkills")}}selected{{/if}}>All Skills</option>
+                    <option value="allAttributes" {{#if (eq system.effectType "allAttributes")}}selected{{/if}}>All Attributes</option>
+                    </select>
+                {{else}}
+                    <span>{{system.effectType}}</span>
+                {{/if}}
+            </label>
+            <label>Which
+                {{#if editable}}
+                    <select name="system.effectKey">
+                    <option value="">—</option>
+                    <optgroup label="Attributes">
+                        {{#each attributeOptions}}
+                            <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                        {{/each}}
+                    </optgroup>
+                    <optgroup label="Skills">
+                        {{#each skillOptions}}
+                            <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                        {{/each}}
+                    </optgroup>
+                    </select>
+                {{else}}
+                    <span>{{system.effectKey}}</span>
+                {{/if}}
+            </label>
+            <label>Value
+                {{#if editable}}
+                    <input type="number" name="system.effectValue" value="{{system.effectValue}}">
+                {{else}}
+                    <span>{{system.effectValue}}</span>
+                {{/if}}
+            </label>
+        </div>
+    {{/if}}
 </fieldset>

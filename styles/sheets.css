@@ -1,3 +1,13 @@
+.ogm-sheet .mode-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ogm-sheet .readonly-text {
+  color: var(--ogm-ink);
+  font-size: 0.9rem;
+}
 
 .ogm-sheet .score-row{
     display: flex;
