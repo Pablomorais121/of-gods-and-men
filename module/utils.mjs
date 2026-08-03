@@ -172,6 +172,16 @@ export async function onDefendClick(message, button) {
     const defenseRoll = new Roll(`1d12 + ${defenseValue}`);
     await defenseRoll.evaluate();
 
+    let critical = false;
+    let fumble = false;
+
+    const dieTerm = defenseRoll.terms.find(t => Array.isArray(t.results));
+    if (dieTerm) {
+        const activeResult = dieTerm.results.find(r => r.active);
+        if (activeResult.result === 12) critical = true;
+        if (activeResult.result === 1) fumble = true;
+    }
+
     const success = defenseRoll.total >= data.attackTotal;
     const damage = success ? 0 : data.attackerStrength + 1;
 
@@ -179,8 +189,8 @@ export async function onDefendClick(message, button) {
 
     const templateData = {
         title: `${targetActor.name} ${defenseType === "block" ? "Blocks" : "Dodges"}`,
-        critical: false,
-        fumble: false,
+        critical,
+        fumble,
         isAttack: false,
         rollHTML,
         showAttackButtons: false,
