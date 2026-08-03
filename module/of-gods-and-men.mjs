@@ -99,6 +99,13 @@ Hooks.on("preUpdateActor", (actor, changes, options, userID) => {
 
 Hooks.on("renderChatMessageHTML", (message, html) => {
   const buttons = html.querySelectorAll('[data-action="defend"]');
+  const resolved = message.getFlag("of-gods-and-men", "resolved");
+
+  if (resolved) {
+    const container = html.querySelector(".attack-buttons");
+    if (container) container.remove();
+    return;
+  }
 
   buttons.forEach(button => {
     button.addEventListener("click", () => onDefendClick(message, button));

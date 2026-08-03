@@ -203,6 +203,7 @@ export async function onDefendClick(message, button) {
         const newHealth = Math.max(0, targetActor.system.resources.health.value - damage);
         await targetActor.update({ "system.resources.health.value": newHealth });
     }
+    await message.update({ "flags.of-gods-and-men.resolved": true});
 
     button.closest(".attack-buttons").remove();
 
