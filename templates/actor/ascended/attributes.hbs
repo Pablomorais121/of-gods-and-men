@@ -2,8 +2,33 @@
     <h1>{{actor.name}}</h1>
     
     <fieldset>
-        <legend>God & Archetype</legend>
-        <p>{{#if god}}{{god.name}}{{else}}No God chosen{{/if}} — {{#if archetype}}{{archetype.name}}{{else}}No Archetype chosen{{/if}}</p>
+        <legend>God</legend>
+        {{#if god}}
+            <div class="summary-row">
+                <img class="item-img" src="{{god.img}}" data-action="openItem" data-item-id="{{god.id}}" alt="{{god.name}}">
+                <span class="item-name" data-action="openItem" data-item-id="{{god.id}}">{{god.name}}</span>
+                <button type="button" class="icon-btn" data-action="removeGodArchetype" data-item-id="{{god.id}}" title="Remove">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        {{else}}
+            <p>Drag a God item here</p>
+        {{/if}}
+    </fieldset>
+
+    <fieldset>
+        <legend>Archetype</legend>
+        {{#if archetype}}
+            <div class="summary-row">
+                <img class="item-img" src="{{archetype.img}}" data-action="openItem" data-item-id="{{archetype.id}}" alt="{{archetype.name}}">
+                <span class="item-name" data-action="openItem" data-item-id="{{archetype.id}}">{{archetype.name}}</span>
+                <button type="button" class="icon-btn" data-action="removeGodArchetype" data-item-id="{{archetype.id}}" title="Remove">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        {{else}}
+            <p>Drag an Archetype item here</p>
+        {{/if}}
     </fieldset>
 
     <fieldset>

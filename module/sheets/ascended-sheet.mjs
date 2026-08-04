@@ -20,7 +20,8 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
             toggleEquip: AscendedSheet.#onToggleEquip,
             deleteObject: AscendedSheet.#onDeleteObject,
             adjustQuantity: AscendedSheet.#onAdjustQuantity,
-            openItem: AscendedSheet.#onOpenItem
+            openItem: AscendedSheet.#onOpenItem,
+            removeGodArchetype: AscendedSheet.#onRemoveGodArchetype
         }
     };
 
@@ -353,6 +354,20 @@ export default class AscendedSheet extends HandlebarsApplicationMixin(ActorSheet
     static async #onOpenItem(event, target) {
         const item = this.actor.items.get(target.dataset.itemId);
         if (item) item.sheet.render(true);
+    }
+
+    static async #onRemoveGodArchetype(event, target) {
+        const itemId = target.dataset.itemId;
+        const item = this.actor.items.get(itemId);
+        if (!item) return;
+
+        if (item.type === "god") {
+            const relatedEffects = this.actor.effects.filter(e =>
+            e.getFlag("of-gods-and-men", "blessingEffect") || e.getFlag("of-gods-and-men", "spellEffect")
+            );
+            for (const effect of relatedEffects) await effect.delete();
+        }
+        await item.delete();
     }
     
     get title(){

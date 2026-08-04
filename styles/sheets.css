@@ -249,3 +249,13 @@
   background: var(--ogm-ink);
   color: var(--ogm-parchment);
 }
+
+.ogm-sheet .summary-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ogm-sheet .summary-row .item-name {
+  flex: 1;
+}
