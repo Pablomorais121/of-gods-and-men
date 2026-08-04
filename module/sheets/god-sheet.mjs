@@ -12,7 +12,6 @@ export default class GodSheet extends PlayEditMixin(HandlebarsApplicationMixin(I
         actions: {
             addSpell: GodSheet.#onAddSpell,
             deleteSpell: GodSheet.#onDeleteSpell,
-            saveSpell: GodSheet.#onSaveSpell,
             toggleMode: GodSheet._onToggleMode
         }
     };
@@ -34,6 +33,16 @@ export default class GodSheet extends PlayEditMixin(HandlebarsApplicationMixin(I
         return context;
     }
 
+    _onRender(context, options) {
+        super._onRender(context, options);
+        if (!context.editable) return;
+
+        const container = this.element.querySelector(".spells-container");
+        if (container) {
+            container.addEventListener("change", () => this.#collectAndSaveSpells());
+        }
+    }
+
     static async #onAddSpell(event, target) {
         const spell = foundry.utils.deepClone(this.item.system.spells);
         spell.push({ name: "", cost: 0, description: "", effectType: "none", effectKey: "", effectValue: 0 });
@@ -47,14 +56,15 @@ export default class GodSheet extends PlayEditMixin(HandlebarsApplicationMixin(I
         await this.item.update({ "system.spells": spells});
     }
 
-    static async #onSaveSpell(event, target) {
+    async #collectAndSaveSpells() {
         const rows = this.element.querySelectorAll(".spell-row");
         const spells = Array.from(rows).map(row =>{
             const cost = Number(row.querySelector(".spell-cost").value);
             const name = row.querySelector(".spell-name").value;
             const description = row.querySelector(".spell-description").value;
             const effectType = row.querySelector(".spell-effect-type").value;
-            const effectKey = row.querySelector(".spell-effect-key").value;
+            const effectKeyEl = row.querySelector(".spell-effect-key");
+            const effectKey = effectKeyEl ? effectKeyEl.value : "";
             const effectValue = Number(row.querySelector(".spell-effect-value").value);
             return { cost, name, description, effectType, effectKey, effectValue };
         });

@@ -100,12 +100,12 @@
         </label>
     </fieldset>
 
-    <fieldset>
+    <div class="spells-container">
         <legend>Spells</legend>
         {{#each system.spells}}
             <div class="spell-row">
                 <label>Name
-                    {{#if editable}}
+                    {{#if ../editable}}
                         <input type="text" class="spell-name" value="{{this.name}}">
                     {{else}}
                         <span>{{this.name}}</span>
@@ -113,7 +113,7 @@
                 </label>
 
                 <label>Cost (Sanity)
-                    {{#if editable}}
+                    {{#if ../editable}}
                         <input type="number" class="spell-cost" value="{{this.cost}}" min="0">
                     {{else}}
                         <span>{{this.cost}}</span>
@@ -121,7 +121,7 @@
                 </label>
 
                 <label>Description
-                    {{#if editable}}
+                    {{#if ../editable}}
                         <textarea class="spell-description">{{this.description}}</textarea>
                     {{else}}
                         <div class="readonly-text">{{{this.description}}}</div>
@@ -129,7 +129,7 @@
                 </label>
 
                 <label>Effect Type
-                    {{#if editable}}
+                    {{#if ../editable}}
                         <select class="spell-effect-type">
                             <option value="none" {{#if (eq this.effectType "none")}}selected{{/if}}>None</option>
                             <option value="single" {{#if (eq this.effectType "single")}}selected{{/if}}>Single</option>
@@ -142,7 +142,7 @@
                 </label>
                 {{#if (eq this.effectType "single")}}
                     <label>Which 
-                        {{#if editable}}
+                        {{#if ../editable}}
                             <select class="spell-effect-key">
                                 <option value="">—</option>
                                 <optgroup label="Attributes">
@@ -162,21 +162,20 @@
                     </label>   
                 {{/if}}
                 <label>Value
-                    {{#if editable}}
+                    {{#if ../editable}}
                         <input type="number" class="spell-effect-value" value="{{this.effectValue}}">
                     {{else}}
                         <span>{{this.effectValue}}</span>
                     {{/if}}
                 </label>
-                {{#if editable}}
+                {{#if ../editable}}
                     <button type="button" data-action="deleteSpell" data-index="{{@index}}">X</button>
                 {{/if}}
             </div>
         {{/each}}
         {{#if editable}}
             <button type="button" data-action="addSpell">+ Add Spell</button>
-            <button type="button" data-action="saveSpell">Save Spell</button>
         {{/if}}
-    </fieldset>
+    </div>
 
 </div>
