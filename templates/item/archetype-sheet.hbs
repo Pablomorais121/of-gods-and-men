@@ -1,39 +1,58 @@
 <div class="archetype-sheet">
+    <div class="mode-toggle-row">
+        <legend>{{item.name}}</legend>
+        {{#if canEdit}}
+            <button type="button" class="icon-btn" data-action="toggleMode" title="Toggle Edit Mode">
+                <i class="fas {{#if editable}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
+            </button>
+        {{/if}}
+    </div>
     <h1>{{item.name}}</h1>
 
     <fieldset>
         <legend>Description</legend>
-        <textarea name="system.description">{{system.description}}</textarea>
+        {{#if editable}}
+            <textarea name="system.description">{{system.description}}</textarea>
+        {{else}}
+            <div class="readonly-text">{{{system.description}}}</div>
+        {{/if}}
     </fieldset>
 
     <fieldset>
         <legend>Priorities</legend>
         {{#each priorityRows}}
             <div class="priority-row">
-                <div class="score-dots">
-                    {{#each this.dots}}
-                        <span
-                        class="score-dot {{#if this}}filled{{/if}}"
-                        data-action="setPriorityPoints"
-                        data-index="{{../index}}"
-                        data-value="{{add @index 1}}"
-                        ></span>
-                    {{/each}}
-                </div>
+                {{#if ../editable}}
+                    <div class="score-dots">
+                        {{#each this.dots}}
+                            <span
+                                class="score-dot {{#if this}}filled{{/if}}"
+                                data-action="setPriorityPoints"
+                                data-index="{{../index}}"
+                                data-value="{{add @index 1}}"
+                            ></span>
+                        {{/each}}
+                    </div>
+                    <div class="priority-skills" data-index="{{this.index}}">
+                        {{#each ../skillChoices}}
+                            <label class="ogm-toggle ogm-toggle-sm">
+                                <input type="checkbox" value="{{this.key}}" {{#if (includes ../this.options this.key)}}checked{{/if}}>
+                                <span>{{this.label}}</span>
+                            </label>
+                        {{/each}}
+                    </div>
 
-                <div class="priority-skills" data-index="{{this.index}}">
-                    {{#each ../skillChoices}}
-                        <label class="ogm-toggle ogm-toggle-sm">
-                        <input type="checkbox" value="{{this.key}}" {{#if (includes ../this.options this.key)}}checked{{/if}}>
-                        <span>{{this.label}}</span>
-                        </label>
-                    {{/each}}
-                </div>
-                
-                <button type="button" data-action="deletePriority" data-index="{{this.index}}">✕</button>
+                    <button type="button" data-action="deletePriority" data-index="{{this.index}}">✕</button>
+                {{else}}
+                    <span class="readonly-text">Level {{this.points}}: {{this.optionsLabel}}</span>
+                {{/if}}
             </div>
         {{/each}}
-        <button type="button" data-action="addPriority">+ Add Priority</button>
+
+        {{#if editable}}
+            <button type="button" data-action="addPriority">+ Add Priority</button>
+        {{/if}}
     </fieldset>
 
 </div>
+

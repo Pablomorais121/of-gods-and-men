@@ -1,9 +1,10 @@
 import { SKILL_LABELS } from "../constants.mjs";
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
+import { PlayEditMixin } from "../sheet-mixins.mjs";
 
 
-export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+export default class ArchetypeSheet extends PlayEditMixin(HandlebarsApplicationMixin(ItemSheetV2)) {
     
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "item", "archetype", "ogm-sheet"],
@@ -12,7 +13,8 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
         actions: {
             addPriority: ArchetypeSheet.#onAddPriority,
             deletePriority: ArchetypeSheet.#onDeletePriority,
-            setPriorityPoints: ArchetypeSheet.#onSetPriorityPoints
+            setPriorityPoints: ArchetypeSheet.#onSetPriorityPoints,
+            toggleMode: ArchetypeSheet._onToggleMode
         }
     };
 
@@ -29,8 +31,10 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
 
         context.priorityRows = this.item.system.priorities.map((p, index) => ({
             index,
+            points: p.points,
             options: p.options,
-            dots: [1, 2, 3].map(n => n <= p.points)
+            dots: [1, 2, 3].map(n => n <= p.points),
+            optionsLabel: p.options.length ? p.options.map(key => SKILL_LABELS[key]).join(", ") : "Any Skill"
         }));
         context.skillChoices = Object.entries(SKILL_LABELS).map(([key, label]) => ({ key, label }));
         
@@ -62,6 +66,7 @@ export default class ArchetypeSheet extends HandlebarsApplicationMixin(ItemSheet
 
     _onRender(context, options) {
         super._onRender(context, options);
+        if (!context.editable) return;
 
         this.element.querySelectorAll(".priority-skills").forEach(container => {
             container.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
