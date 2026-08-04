@@ -259,3 +259,21 @@
 .ogm-sheet .summary-row .item-name {
   flex: 1;
 }
+
+.ogm-sheet label > span,
+.ogm-sheet .readonly-text {
+  display: inline-block;
+  min-width: 60px;
+  padding: 4px 6px;
+  background: var(--ogm-parchment-dark);
+  border: 1px solid var(--ogm-border);
+  border-radius: var(--ogm-radius);
+  text-align: center;
+  color: var(--ogm-ink);
+}
+
+.ogm-sheet .readonly-text {
+  display: block;
+  text-align: left;
+  min-height: 1.2em;
+}
