@@ -31,32 +31,34 @@
                         <span>{{system.effectType}}</span>
                     {{/if}}
                 </label>
-                <label>Which
-                    {{#if editable}}
-                        <select name="system.effectKey">
-                        <option value="">—</option>
-                        <optgroup label="Attributes">
-                            {{#each attributeOptions}}
-                                <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
-                            {{/each}}
-                        </optgroup>
-                        <optgroup label="Skills">
-                            {{#each skillOptions}}
-                                <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
-                            {{/each}}
-                        </optgroup>
-                        </select>
-                    {{else}}
-                        <span>{{system.effectKey}}</span>
-                    {{/if}}
-                </label>
-                <label>Value
-                    {{#if editable}}
-                        <input type="number" name="system.effectValue" value="{{system.effectValue}}">
-                    {{else}}
-                        <span>{{system.effectValue}}</span>
-                    {{/if}}
-                </label>
+                {{#if (eq system.effectType "single")}}
+                    <label>Which
+                        {{#if editable}}
+                            <select name="system.effectKey">
+                            <option value="">—</option>
+                            <optgroup label="Attributes">
+                                {{#each attributeOptions}}
+                                    <option value="attributes.{{this.key}}" {{#if (eq ../system.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                                {{/each}}
+                            </optgroup>
+                            <optgroup label="Skills">
+                                {{#each skillOptions}}
+                                    <option value="skills.{{this.key}}" {{#if (eq ../system.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                                {{/each}}
+                            </optgroup>
+                            </select>
+                        {{else}}
+                            <span>{{system.effectKey}}</span>
+                        {{/if}}
+                    </label>
+                    <label>Value
+                        {{#if editable}}
+                            <input type="number" name="system.effectValue" value="{{system.effectValue}}">
+                        {{else}}
+                            <span>{{system.effectValue}}</span>
+                        {{/if}}
+                    </label>
+                {{/if}}
             </div>
         {{/if}}
     </fieldset>

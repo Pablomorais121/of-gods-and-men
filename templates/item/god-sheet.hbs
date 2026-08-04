@@ -49,26 +49,27 @@
                 <span>{{system.blessing.effectType}}</span>
             {{/if}}
         </label>
-
-        <label>Which (only for "Single")
-            {{#if editable}}
-                <select name="system.blessing.effectKey">
-                    <option value="">—</option>
-                    <optgroup label="Attributes">
-                        {{#each attributeOptions}}
-                            <option value="attributes.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
-                        {{/each}}
-                    </optgroup>
-                    <optgroup label="Skills">
-                        {{#each skillOptions}}
-                            <option value="skills.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
-                        {{/each}}
-                    </optgroup>
-                </select>
-            {{else}}
-                <span>{{system.blessing.effectKey}}</span>
-            {{/if}}
-        </label>
+        {{#if (eq system.blessing.effectType "single")}}
+            <label>Which 
+                {{#if editable}}
+                    <select name="system.blessing.effectKey">
+                        <option value="">—</option>
+                        <optgroup label="Attributes">
+                            {{#each attributeOptions}}
+                                <option value="attributes.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                            {{/each}}
+                        </optgroup>
+                        <optgroup label="Skills">
+                            {{#each skillOptions}}
+                                <option value="skills.{{this.key}}" {{#if (eq ../system.blessing.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                            {{/each}}
+                        </optgroup>
+                    </select>
+                {{else}}
+                    <span>{{system.blessing.effectKey}}</span>
+                {{/if}}
+            </label>   
+        {{/if}}
 
         <label>Value
             {{#if editable}}
@@ -139,25 +140,27 @@
                         <span>{{this.effectType}}</span>
                     {{/if}}
                 </label>
-                <label>Which
-                    {{#if editable}}
-                        <select class="spell-effect-key">
-                            <option value="">—</option>
-                            <optgroup label="Attributes">
-                                {{#each ../attributeOptions}}
-                                    <option value="attributes.{{this.key}}" {{#if (eq ../this.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
-                                {{/each}}
-                            </optgroup>
-                            <optgroup label="Skills">
-                                {{#each ../skillOptions}}
-                                    <option value="skills.{{this.key}}" {{#if (eq ../this.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
-                                {{/each}}
-                            </optgroup>
-                        </select>
-                    {{else}}
-                        <span>{{this.effectKey}}</span>
-                    {{/if}}
-                </label>
+                {{#if (eq this.effectType "single")}}
+                    <label>Which 
+                        {{#if editable}}
+                            <select class="spell-effect-key">
+                                <option value="">—</option>
+                                <optgroup label="Attributes">
+                                    {{#each ../attributeOptions}}
+                                        <option value="attributes.{{this.key}}" {{#if (eq ../this.effectKey (concat "attributes." this.key))}}selected{{/if}}>{{this.label}}</option>
+                                    {{/each}}
+                                </optgroup>
+                                <optgroup label="Skills">
+                                    {{#each ../skillOptions}}
+                                        <option value="skills.{{this.key}}" {{#if (eq ../this.effectKey (concat "skills." this.key))}}selected{{/if}}>{{this.label}}</option>
+                                    {{/each}}
+                                </optgroup>
+                            </select>
+                        {{else}}
+                            <span>{{this.effectKey}}</span>
+                        {{/if}}
+                    </label>   
+                {{/if}}
                 <label>Value
                     {{#if editable}}
                         <input type="number" class="spell-effect-value" value="{{this.effectValue}}">
