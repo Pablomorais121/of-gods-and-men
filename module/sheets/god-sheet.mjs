@@ -1,8 +1,9 @@
 const { HandlebarsApplicationMixin} = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
 import { SKILL_LABELS, ATTRIBUTE_LABELS } from "../constants.mjs";
+import { PlayEditMixin } from "../sheet-mixins.mjs";
 
-export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+export default class GodSheet extends PlayEditMixin(HandlebarsApplicationMixin(ItemSheetV2)) {
     
     static DEFAULT_OPTIONS ={
         classes: ["of-gods-and-men", "sheet", "item", "god", "ogm-sheet"],
@@ -11,7 +12,8 @@ export default class GodSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
         actions: {
             addSpell: GodSheet.#onAddSpell,
             deleteSpell: GodSheet.#onDeleteSpell,
-            saveSpell: GodSheet.#onSaveSpell
+            saveSpell: GodSheet.#onSaveSpell,
+            toggleMode: GodSheet._onToggleMode
         }
     };
 
