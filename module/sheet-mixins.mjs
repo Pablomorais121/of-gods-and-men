@@ -22,5 +22,17 @@ export function PlayEditMixin(Base) {
         this._mode = this._mode === "edit" ? "play" : "edit";
         this.render();
     }
+
+    *_headerControlButtons() {
+      for (const control of super._headerControlButtons()) yield control;
+
+      if (game.user.isGM) {
+        yield {
+          icon: `fas ${this._mode === "edit" ? "fa-lock-open" : "fa-lock"}`,
+          label: this._mode === "edit" ? "Lock (Play Mode)" : "Unlock (Edit Mode)",
+          action: "toggleMode"
+        };
+      }
+    }
   };
 }

@@ -1,14 +1,5 @@
 <div class="archetype-sheet">
-    <div class="mode-toggle-row">
-        <legend>{{item.name}}</legend>
-        {{#if canEdit}}
-            <button type="button" class="icon-btn" data-action="toggleMode" title="Toggle Edit Mode">
-                <i class="fas {{#if editable}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
-            </button>
-        {{/if}}
-    </div>
-    <h1>{{item.name}}</h1>
-
+    <h1 class="sheet-title">{{item.name}}</h1>
     <fieldset>
         <legend>Description</legend>
         {{#if editable}}
