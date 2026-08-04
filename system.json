@@ -2,7 +2,7 @@
   "id": "of-gods-and-men",
   "title": "Of Gods and Men",
   "description": "A tabletop roleplaying game where mortals become the chosen champions of the gods.",
-  "version": "0.0.1",
+  "version": "1.0.0",
 
   "authors": [
     {
@@ -12,7 +12,7 @@
 
   "compatibility": {
     "minimum": "14",
-    "verified": "14.0"
+    "verified": "14.359"
   },
 
   "esmodules": [
